@@ -6,7 +6,19 @@ const initialState = {
       name: "Mirshod",
       surname: "Murodov",
       group: "E-201",
-      absence: ["English", "Math", "Python", "Logic", "smth"],
+      absence: [
+        "English for beginners It specialists",
+        "Math",
+        "Python",
+        "Logic",
+        "smth",
+      ],
+    },
+    {
+      name: "Dilshod",
+      surname: "Adizov",
+      group: "E-203",
+      absence: ["Math"],
     },
   ],
 };

@@ -19,7 +19,7 @@ export default function NewsListItem({ item, index, data }) {
           {item.absence.length > 0 ? item.absence.join(", ") : item.absence[0]}
         </td>
         <td className="hidden">
-          <i class="fa-solid fa-angle-right"></i>
+          <i className="fa-solid fa-angle-right"></i>
         </td>
       </tr>
     </>

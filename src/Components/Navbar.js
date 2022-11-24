@@ -1,8 +1,24 @@
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { delete_cookie } from "sfcookies";
+import { logOutTeacher } from "../Components/TeacherLogin/login_slice";
+import { useNavigate } from "react-router-dom";
 export default function Navbar() {
+  const data = useSelector((state) => state.login);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logOut = () => {
+    delete_cookie("access_token");
+    delete_cookie("refresh_token");
+    dispatch(logOutTeacher());
+    navigate("/teacher-login");
+    window.location.reload();
+  };
+
   return (
     <header>
-      <div className="mx-auto bg-navbar flex p-3 justify-between  ">
+      <div className="mx-auto bg-navbar flex py-3 px-3 justify-between  ">
         <div className="nav-brand">
           <Link to="/">
             <span className="mr-2">
@@ -16,11 +32,20 @@ export default function Navbar() {
         <div className="">
           <ul className="flex items-center justify-end">
             <li>
-              <Link to="/teacher-login">
-                <button className="bg-buttonMain rounded-lg text-secText py-2 px-4 font-medium">
-                  Teachers
+              {data.loggedIn ? (
+                <button
+                  className="bg-buttonMain rounded-lg text-secText py-2 px-4 font-medium"
+                  onClick={logOut}
+                >
+                  Log out
                 </button>
-              </Link>
+              ) : (
+                <Link to="/teacher-login">
+                  <button className="bg-buttonMain rounded-lg text-secText py-2 px-4 font-medium">
+                    Teachers
+                  </button>
+                </Link>
+              )}
             </li>
           </ul>
         </div>

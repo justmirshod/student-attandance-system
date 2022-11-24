@@ -1,14 +1,18 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Toast from "../Components/Toast";
-import { notify, validateEmail } from "../utils/utils";
+import { notify } from "../utils/utils";
 import { toast } from "react-toastify";
 import validator from "validator";
+import { bake_cookie } from "sfcookies";
+import { useDispatch, useSelector } from "react-redux";
+import { loginTeacher } from "../Components/TeacherLogin/login_slice";
 
 export default function TeacherLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const sendData = () => {
     if (!email || !password) {
@@ -34,6 +38,9 @@ export default function TeacherLogin() {
           return notify(res.detail[0], "error");
         }
 
+        bake_cookie("access_token", res.access);
+        bake_cookie("refresh_token", res.refresh);
+        dispatch(loginTeacher("saburov"));
         navigate("/dashboard");
       });
   };
@@ -86,6 +93,14 @@ export default function TeacherLogin() {
             Submit
           </button>
           <Toast />
+        </div>
+        <div>
+          <span>
+            <Link to={"/"} className="text-buttonMain mt-4 inline-block">
+              <i className="fa-solid fa-arrow-right mx-2"></i>
+              Back to home
+            </Link>
+          </span>
         </div>
       </div>
     </>

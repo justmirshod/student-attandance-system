@@ -27,7 +27,7 @@ const Routing = () => {
     if (location.pathname === path) {
       return navigate(path);
     } else {
-      navigate("/");
+      return navigate("/");
     }
   };
 
@@ -35,18 +35,15 @@ const Routing = () => {
     const isLogged = read_cookie("access_token");
     if (typeof isLogged !== "object") {
       if (location.pathname === "/teacher-login") {
-        navigate("/dashboard");
+        return navigate("/dashboard");
       }
 
       dispatch(loginTeacher("murodov"));
-      // navigate("/dashboard");
     } else {
       navigatePage("/teacher-login");
-      navigatePage("/hello");
-      // navigate("/");
     }
     //eslint-disable-next-line
-  }, []);
+  }, [location.pathname]);
 
   return (
     <Routes>

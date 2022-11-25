@@ -18,7 +18,7 @@ module.exports = {
         secText: "white",
         linkText: "#3D80B5",
         buttonMain: "#248BDA",
-        buttonSec: "#248BDA",
+        buttonSec: "#2D3842",
         input: "#242E38",
         tableHead: "#293440",
         tableBody: "#212A33",

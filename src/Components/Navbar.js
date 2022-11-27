@@ -3,19 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { delete_cookie } from "sfcookies";
 import { logOutTeacher } from "../Components/TeacherLogin/login_slice";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 export default function Navbar() {
   const data = useSelector((state) => state.login);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
-  const generalPath = location.pathname.substring(0, 10);
 
   const logOut = () => {
     delete_cookie("access_token");
     delete_cookie("refresh_token");
     dispatch(logOutTeacher());
-    // navigate("/teacher-login");
+    navigate("/teacher-login");
     window.location.reload();
   };
 
@@ -38,7 +35,7 @@ export default function Navbar() {
               <li className="mr-2">
                 {data.loggedIn ? (
                   <Link to={"/dashboard"}>
-                    <button className="bg-buttonSec rounded-lg text-secText py-2 px-4 font-medium">
+                    <button className=" bg-buttonMain rounded-lg text-secText py-2 px-4 font-medium">
                       Dashboard
                     </button>
                   </Link>
@@ -47,7 +44,7 @@ export default function Navbar() {
               <li>
                 {data.loggedIn ? (
                   <button
-                    className="bg-buttonMain rounded-lg text-secText py-2 px-4 font-medium"
+                    className="bg-buttonSec rounded-lg text-secText py-2 px-4 font-medium"
                     onClick={logOut}
                   >
                     Log out

@@ -22,6 +22,7 @@ module.exports = {
         input: "#242E38",
         tableHead: "#293440",
         tableBody: "#212A33",
+        lightblue: "#293747",
       },
     },
   },

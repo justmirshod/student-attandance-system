@@ -1,11 +1,6 @@
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home";
 import TeacherLogin from "./Pages/TeacherLogin";
 import Dashboard from "./Pages/Dashboard";
@@ -15,7 +10,8 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { read_cookie } from "sfcookies";
 import { loginTeacher } from "./Components/TeacherLogin/login_slice";
-import Sidebar from "./Components/Sidebar";
+import CheckAttandance from "./Pages/CheckAttandance";
+import TakeAttandance from "./Pages/TakeAttandace";
 
 const Routing = () => {
   const { loggedIn } = useSelector((state) => state.login);
@@ -35,7 +31,7 @@ const Routing = () => {
     const isLogged = read_cookie("access_token");
     if (typeof isLogged !== "object") {
       if (location.pathname === "/teacher-login") {
-        return navigate("/dashboard");
+        return navigate("/");
       }
 
       dispatch(loginTeacher("murodov"));
@@ -53,6 +49,12 @@ const Routing = () => {
       ) : null}
 
       {loggedIn ? <Route path="/dashboard" element={<Dashboard />} /> : null}
+      {loggedIn ? (
+        <Route path="/check-attandance" element={<CheckAttandance />} />
+      ) : null}
+      {loggedIn ? (
+        <Route path="/take-attandance" element={<TakeAttandance />} />
+      ) : null}
     </Routes>
   );
 };

@@ -40,7 +40,18 @@ export default function TeacherLogin() {
 
         bake_cookie("access_token", res.access);
         bake_cookie("refresh_token", res.refresh);
-        dispatch(loginTeacher("saburov"));
+        fetch("http://127.0.0.1:8000/accounts/teachers/me/", {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: "Bearer " + res.access,
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            console.log(res);
+            const name = `${res.first_name} ${res.last_name}`;
+            dispatch(loginTeacher({ name, id: res.id }));
+          });
         navigate("/dashboard");
       });
   };

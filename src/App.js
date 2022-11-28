@@ -30,11 +30,28 @@ const Routing = () => {
   useEffect(() => {
     const isLogged = read_cookie("access_token");
     if (typeof isLogged !== "object") {
-      if (location.pathname === "/teacher-login") {
-        return navigate("/dashboard");
-      }
+      fetch("http://127.0.0.1:8000/accounts/teachers/me/", {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: "Bearer " + read_cookie("access_token"),
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          const name = `${res.first_name} ${res.last_name}`;
+          dispatch(loginTeacher({ name, id: res.id }));
+        });
+    } else {
+      navigate("/teacher-login");
+    }
+  }, []);
 
-      dispatch(loginTeacher("murodov"));
+  useEffect(() => {
+    const isLogged = read_cookie("access_token");
+    if (typeof isLogged !== "object") {
+      if (location.pathname === "/teacher-login") {
+        return navigate("/");
+      }
     } else {
       navigatePage("/teacher-login");
     }

@@ -23,6 +23,7 @@ module.exports = {
         tableHead: "#293440",
         tableBody: "#212A33",
         lightblue: "#293747",
+        lightgray: "#8B8B8B",
       },
     },
   },

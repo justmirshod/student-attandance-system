@@ -1,11 +1,13 @@
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { delete_cookie } from "sfcookies";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logOutTeacher } from "./TeacherLogin/login_slice";
-import { useNavigate } from "react-router-dom";
+import { showContent, hideContent, toggleContent } from "./sidebar_slice";
 export default function Sidebar({ name }) {
   const location = useLocation();
+
+  const { show } = useSelector((state) => state.sidebar);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,12 +20,13 @@ export default function Sidebar({ name }) {
   };
 
   return (
-    <div className="sidebar w-1/5 min-h-screen bg-navbar p-4 ">
-      <h1 className="text-secText text-lg mb-10">{name}</h1>
-      <ul>
+    <div className="sidebar w-1/6 min-h-screen bg-navbar p-4 ">
+      <h1 className="text-secText text-xl mb-10 tracking-wide">{name}</h1>
+      <ul className="sidebar_list">
         <li className="text-secText hover:bg-lightblue p-2 rounded-xl duration-75 mb-2">
-          <Link to={"/"} className="block">
-            Home
+          <Link to={"/"} className="flex items-center">
+            <i class="fa-solid fa-house mx-2"></i>
+            <span>Home</span>
           </Link>
         </li>
         <li
@@ -33,34 +36,74 @@ export default function Sidebar({ name }) {
               : "text-secText hover:bg-lightblue p-2 rounded-xl duration-75 mb-2"
           }
         >
-          <Link to={"/dashboard"} className="block">
-            Dashboard
+          <Link to={"/dashboard"} className="flex items-center">
+            <i class="fa-solid fa-table-columns mx-2"></i>
+            <span>Dashboard</span>
           </Link>
         </li>
-        <li
-          className={
-            location.pathname === "/check-attandance"
-              ? "text-secText hover:bg-lightblue bg-lightblue p-2 rounded-xl duration-75 mb-2"
-              : "text-secText hover:bg-lightblue  p-2 rounded-xl duration-75 mb-2"
-          }
-        >
-          <Link to={"/check-attandance"} className="block">
-            Check attandance
+        <li className="text-secText p-2 rounded-xl duration-75">
+          <div
+            className={
+              show
+                ? " inline-flex items-center w-3/4 cursor-pointer mb-2 duration-500 mx-2"
+                : " inline-flex items-center w-3/4 cursor-pointer duration-500 mx-2"
+            }
+            onClick={() => dispatch(toggleContent())}
+          >
+            <i class="fa-solid fa-clipboard-list mr-3"></i>
+            <span>Attandance</span>
+            <i
+              className={
+                show
+                  ? "fa-solid fa-chevron-down text-xs ml-2 rotate-180 duration-700 mt-[2px]"
+                  : "fa-solid fa-chevron-down text-xs ml-2 duration-700 mt-[2px]"
+              }
+            ></i>
+          </div>
+          <div
+            className={
+              show
+                ? "h-[85px] duration-500 opacity-100"
+                : "h-0 overflow-hidden duration-500 opacity-0"
+            }
+          >
+            <div
+              className={
+                location.pathname === "/check-attandance"
+                  ? "text-secText hover:bg-lightblue bg-lightblue p-2 rounded-xl  duration-75 mb-1 ml-1"
+                  : "text-secText hover:bg-lightblue  p-2 rounded-xl  duration-75 mb-1 ml-1"
+              }
+              onClick={() => dispatch(showContent())}
+            >
+              <Link to={"/check-attandance"} className="flex items-center">
+                <i class="fa-regular fa-square-check mx-2 "></i>
+                <span>Check</span>
+              </Link>
+            </div>
+            <div
+              onClick={() => dispatch(showContent())}
+              className={
+                location.pathname === "/take-attandance"
+                  ? "text-secText hover:bg-lightblue bg-lightblue p-2 rounded-xl duration-75 mb-1 ml-1"
+                  : "text-secText hover:bg-lightblue  p-2 rounded-xl duration-75 mb-1 ml-1"
+              }
+            >
+              <Link to={"/take-attandance"} className="flex items-center">
+                <i class="fa-solid fa-eye mx-2"></i>
+                <span>See</span>
+              </Link>
+            </div>
+          </div>
+        </li>
+        <li className="text-secText p-2 rounded-xl hover:bg-lightblue">
+          <Link to={"/profile"}>
+            <i class="fa-solid fa-user mx-2"></i>
+            <span>Profile</span>
           </Link>
         </li>
-        <li
-          className={
-            location.pathname === "/take-attandance"
-              ? "text-secText hover:bg-lightblue bg-lightblue p-2 rounded-xl duration-75 mb-2"
-              : "text-secText hover:bg-lightblue  p-2 rounded-xl duration-75 mb-2"
-          }
-        >
-          <Link to={"/take-attandance"} className="block">
-            Take attandance
-          </Link>
-        </li>
-        <li>
-          <button className="text-white p-2 rounded-xl" onClick={logOut}>
+        <li className="flex items-center px-2">
+          <i class="fa-solid fa-arrow-right-to-bracket text-red-600"></i>
+          <button className=" text-red-600 p-2 rounded-xl" onClick={logOut}>
             Log out
           </button>
         </li>

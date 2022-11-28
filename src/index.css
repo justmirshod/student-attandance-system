@@ -11,3 +11,7 @@ body {
 .min-content {
   min-height: calc(100vh - 64px);
 }
+
+.sidebar_list {
+  height: calc(100% - 96px);
+}

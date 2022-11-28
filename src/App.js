@@ -31,7 +31,7 @@ const Routing = () => {
     const isLogged = read_cookie("access_token");
     if (typeof isLogged !== "object") {
       if (location.pathname === "/teacher-login") {
-        return navigate("/");
+        return navigate("/dashboard");
       }
 
       dispatch(loginTeacher("murodov"));

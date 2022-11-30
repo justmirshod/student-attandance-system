@@ -8,7 +8,7 @@ export default function CheckAttandance() {
   const { userId } = useSelector((state) => state.login);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/attendance/subjects/${userId}/`, {
+    fetch(`http://127.0.0.1:8000/accounts/users/${userId}/subjects/`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
@@ -23,7 +23,15 @@ export default function CheckAttandance() {
     <>
       <div className="flex">
         <Sidebar name={name} />
-        <div className="check-attandance w-5/6 min-h-screen bg-home"></div>
+        <div className="check-attandance w-5/6 min-h-screen flex items-center ">
+          <div className="w-1/3 min-h-screen check bg-home">
+            <div className="">
+              <select name="" id="">
+                <option value=""></option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

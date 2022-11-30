@@ -20,12 +20,12 @@ export default function Sidebar({ name }) {
   };
 
   return (
-    <div className="sidebar w-1/6 min-h-screen bg-navbar p-4 ">
+    <div className="sidebar w-1/5 min-h-screen bg-navbar p-4 shadow-2xl">
       <h1 className="text-secText text-xl mb-10 tracking-wide">{name}</h1>
       <ul className="sidebar_list">
         <li className="text-secText hover:bg-lightblue p-2 rounded-xl duration-75 mb-2">
           <Link to={"/"} className="flex items-center">
-            <i class="fa-solid fa-house mx-2"></i>
+            <i className="fa-solid fa-house mx-2"></i>
             <span>Home</span>
           </Link>
         </li>
@@ -37,7 +37,7 @@ export default function Sidebar({ name }) {
           }
         >
           <Link to={"/dashboard"} className="flex items-center">
-            <i class="fa-solid fa-table-columns mx-2"></i>
+            <i className="fa-solid fa-table-columns mx-2"></i>
             <span>Dashboard</span>
           </Link>
         </li>
@@ -50,7 +50,7 @@ export default function Sidebar({ name }) {
             }
             onClick={() => dispatch(toggleContent())}
           >
-            <i class="fa-solid fa-clipboard-list mr-3"></i>
+            <i className="fa-solid fa-clipboard-list mr-3"></i>
             <span>Attandance</span>
             <i
               className={
@@ -76,7 +76,7 @@ export default function Sidebar({ name }) {
               onClick={() => dispatch(showContent())}
             >
               <Link to={"/check-attandance"} className="flex items-center">
-                <i class="fa-regular fa-square-check mx-2 "></i>
+                <i className="fa-regular fa-square-check mx-2 "></i>
                 <span>Check</span>
               </Link>
             </div>
@@ -89,7 +89,7 @@ export default function Sidebar({ name }) {
               }
             >
               <Link to={"/take-attandance"} className="flex items-center">
-                <i class="fa-solid fa-eye mx-2"></i>
+                <i className="fa-solid fa-eye mx-2"></i>
                 <span>See</span>
               </Link>
             </div>
@@ -97,12 +97,12 @@ export default function Sidebar({ name }) {
         </li>
         <li className="text-secText p-2 rounded-xl hover:bg-lightblue">
           <Link to={"/profile"}>
-            <i class="fa-solid fa-user mx-2"></i>
+            <i className="fa-solid fa-user mx-2"></i>
             <span>Profile</span>
           </Link>
         </li>
         <li className="flex items-center px-2">
-          <i class="fa-solid fa-arrow-right-to-bracket text-red-600"></i>
+          <i className="fa-solid fa-arrow-right-to-bracket text-red-600"></i>
           <button className=" text-red-600 p-2 rounded-xl" onClick={logOut}>
             Log out
           </button>

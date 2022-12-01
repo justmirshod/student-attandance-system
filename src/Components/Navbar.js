@@ -4,13 +4,14 @@ import { delete_cookie } from "sfcookies";
 import { logOutTeacher } from "../Components/TeacherLogin/login_slice";
 import { useNavigate } from "react-router-dom";
 export default function Navbar() {
-  const data = useSelector((state) => state.login);
+  const { data } = useSelector((state) => state.login);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const logOut = () => {
     delete_cookie("access_token");
     delete_cookie("refresh_token");
+    delete_cookie("user");
     dispatch(logOutTeacher());
     navigate("/teacher-login");
     window.location.reload();
@@ -33,7 +34,7 @@ export default function Navbar() {
           <div className="">
             <ul className="flex items-center justify-end">
               <li className="mr-2">
-                {data.loggedIn ? (
+                {data.user ? (
                   <Link to={"/dashboard"}>
                     <button className=" bg-buttonMain rounded-lg text-secText py-2 px-4 font-medium">
                       Dashboard
@@ -42,7 +43,7 @@ export default function Navbar() {
                 ) : null}
               </li>
               <li>
-                {data.loggedIn ? (
+                {data.user ? (
                   <button
                     className="bg-buttonSec rounded-lg text-secText py-2 px-4 font-medium"
                     onClick={logOut}

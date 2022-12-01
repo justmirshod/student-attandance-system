@@ -4,12 +4,16 @@ import { delete_cookie } from "sfcookies";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutTeacher } from "./TeacherLogin/login_slice";
 import { showContent, hideContent, toggleContent } from "./sidebar_slice";
-export default function Sidebar({ name }) {
+export default function Sidebar() {
   const location = useLocation();
-
   const { show } = useSelector((state) => state.sidebar);
+  const { data } = useSelector((state) => state.login);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const name = data.user
+    ? `${data.user.first_name} ${data.user.last_name}`
+    : "";
 
   const logOut = () => {
     delete_cookie("access_token");
@@ -21,7 +25,9 @@ export default function Sidebar({ name }) {
 
   return (
     <div className="sidebar w-1/5 min-h-screen bg-navbar p-4 shadow-2xl">
-      <h1 className="text-secText text-xl mb-10 tracking-wide">{name}</h1>
+      <h1 className="text-secText text-xl mb-10 tracking-wide">
+        {data.user ? name : "Loading..."}
+      </h1>
       <ul className="sidebar_list">
         <li className="text-secText hover:bg-lightblue p-2 rounded-xl duration-75 mb-2">
           <Link to={"/"} className="flex items-center">

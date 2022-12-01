@@ -14,10 +14,11 @@ import CheckAttandance from "./Pages/CheckAttandance";
 import TakeAttandance from "./Pages/TakeAttandace";
 
 const Routing = () => {
-  const { loggedIn } = useSelector((state) => state.login);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const user = read_cookie("user");
+  const access = read_cookie("access_token");
 
   const navigatePage = (path) => {
     if (location.pathname === path) {
@@ -28,50 +29,28 @@ const Routing = () => {
   };
 
   useEffect(() => {
-    const isLogged = read_cookie("access_token");
-    if (typeof isLogged !== "object") {
-      fetch("http://127.0.0.1:8000/accounts/teachers/me/", {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: "Bearer " + read_cookie("access_token"),
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          const name = `${res.first_name} ${res.last_name}`;
-          dispatch(loginTeacher({ name, id: res.id }));
-        });
-    } else {
-      navigate("/teacher-login");
-    }
-  }, []);
-
-  useEffect(() => {
-    const isLogged = read_cookie("access_token");
-    if (typeof isLogged !== "object") {
+    if (typeof access !== "object") {
       if (location.pathname === "/teacher-login") {
         return navigate("/");
       }
+      dispatch(loginTeacher({ user }));
     } else {
-      navigatePage("/teacher-login");
+      if (location.pathname === "/") {
+        return navigate("/");
+      }
+      navigate("/teacher-login");
     }
-    //eslint-disable-next-line
   }, [location.pathname]);
 
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      {!loggedIn ? (
-        <Route path="/teacher-login" element={<TeacherLogin />} />
-      ) : null}
-
-      {loggedIn ? <Route path="/dashboard" element={<Dashboard />} /> : null}
-      {loggedIn ? (
-        <Route path="/check-attandance" element={<CheckAttandance />} />
-      ) : null}
-      {loggedIn ? (
-        <Route path="/take-attandance" element={<TakeAttandance />} />
-      ) : null}
+      {typeof access !== "object" ? null : (
+        <Route path={"/teacher-login"} element={<TeacherLogin />} />
+      )}
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/check-attandance" element={<CheckAttandance />} />
+      <Route path="/take-attandance" element={<TakeAttandance />} />
     </Routes>
   );
 };

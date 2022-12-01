@@ -2,8 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   data: {},
-  isLoading: false,
-  loggedIn: false,
+  isLoading: "",
   activeUser: "",
   userId: "",
   subjects: [],
@@ -31,17 +30,19 @@ export const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-    loginTeacher: (state, action) => {
-      state.loggedIn = true;
-      state.activeUser = action.payload.name;
-      state.userId = action.payload.id;
+    loginTeacher: (state, { payload }) => {
+      state.data = payload;
     },
     logOutTeacher: (state) => {
-      state.loggedIn = false;
-      state.activeUser = "";
+      state.data = {};
     },
     clearData: (state) => {
-      state.data = {};
+      if (state.data.detail) {
+        state.data = {};
+      } else if (state.data.user) {
+        delete state.data.access;
+        delete state.data.refresh;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -49,8 +50,8 @@ export const loginSlice = createSlice({
       .addCase(login.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(login.fulfilled, (state, action) => {
-        state.data = action.payload;
+      .addCase(login.fulfilled, (state, { payload }) => {
+        state.data = payload;
         state.isLoading = false;
       })
       .addCase(login.rejected, (state) => {

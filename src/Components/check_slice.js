@@ -1,10 +1,26 @@
+import dayjs from "dayjs";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+const date = new Date();
+
+const validDate = (item) => {
+  if (item.length === 1) {
+    return "0" + item;
+  } else {
+    return item;
+  }
+};
+
+const currentDate = `${validDate(date.getFullYear().toString())}-${validDate(
+  (date.getMonth() + 1).toString()
+)}-${validDate(date.getDate().toString())}`;
 
 const initialState = {
   groups: {},
-  activeGroup: "",
+  activeGroupId: "",
   activeSubject: "",
   isLoading: false,
+  activeDate: currentDate,
 };
 
 export const fetchGroups = createAsyncThunk(
@@ -29,11 +45,18 @@ export const groupSlice = createSlice({
   initialState,
   reducers: {
     setActiveSubject: (state, { payload }) => {
-      if (payload === "default") {
-        state.activeSubject = "";
-        return;
-      }
       state.activeSubject = payload;
+      state.activeGroupId = "";
+      state.activeDate = currentDate;
+    },
+    setActiveGroup: (state, { payload }) => {
+      state.activeGroupId = payload;
+    },
+    setActiveDate: (state, { payload }) => {
+      state.activeDate = payload;
+    },
+    resetActiveDate: (state) => {
+      state.activeDate = currentDate;
     },
   },
   extraReducers: (builder) => {
@@ -51,5 +74,10 @@ export const groupSlice = createSlice({
   },
 });
 
-export const { setActiveGroup, setActiveSubject } = groupSlice.actions;
+export const {
+  setActiveGroup,
+  setActiveSubject,
+  setActiveDate,
+  resetActiveDate,
+} = groupSlice.actions;
 export default groupSlice.reducer;

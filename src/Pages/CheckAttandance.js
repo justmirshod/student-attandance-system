@@ -2,25 +2,44 @@ import Sidebar from "../Components/Sidebar";
 import { useSelector, useDispatch } from "react-redux";
 import { read_cookie } from "sfcookies";
 import { useEffect } from "react";
+import { notify } from "../utils/utils";
+import { toast, ToastContainer } from "react-toastify";
 import {
+  clearAttandance,
   fetchGroups,
-  resetActiveDate,
   setActiveGroup,
   setActiveSubject,
 } from "../Components/check_slice";
 import Datapicker from "../Components/Datapicker/Datapicker";
+import StudentList from "../Components/StudentList/StudentList";
+import Toast from "../Components/Toast";
 
 export default function CheckAttandance() {
   const { data } = useSelector((state) => state.login);
-  const { groups, activeGroupId, activeSubject } = useSelector(
+  const { groups, activeGroupId, activeSubject, attandance } = useSelector(
     (state) => state.groups
   );
   const dispatch = useDispatch();
-  const access = read_cookie("access_token");
+  const token = read_cookie("access_token");
+
+  useEffect(() => {
+    if (attandance.length) {
+      dispatch(clearAttandance());
+      return;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (attandance.length) {
+      notify(attandance[0], "error");
+      // dispatch(clearAttandance());
+      return;
+    }
+  }, [attandance]);
 
   useEffect(() => {
     if (data.user) {
-      dispatch(fetchGroups({ id: data.user.id, token: access }));
+      dispatch(fetchGroups({ id: data.user.id, token }));
     }
   }, [data]);
 
@@ -41,8 +60,8 @@ export default function CheckAttandance() {
                       <input
                         id={`bordered-radio-${item.id}`}
                         type="radio"
-                        value={item.slug}
-                        checked={item.slug === activeSubject}
+                        value={item.id}
+                        checked={item.id == activeSubject}
                         name="bordered-radio"
                         className="w-4 border-none h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
                         onChange={(e) =>
@@ -68,7 +87,7 @@ export default function CheckAttandance() {
                 <div className="group_list">
                   <ul className="grid gap-3 w-full md:grid-cols-2">
                     {groups
-                      .filter((subject) => subject.slug === activeSubject)[0]
+                      .filter((subject) => subject.id == activeSubject)[0]
                       .group.map((item) => (
                         <li key={item.id}>
                           <input
@@ -114,9 +133,18 @@ export default function CheckAttandance() {
           </div>
           {groups.length && activeSubject && activeGroupId ? (
             <div className="w-3/5 min-h-screen">
-              <div className="w-4/5 flex justify-center mx-auto mt-10 p-3 shadow-2xl">
-                <Datapicker />
-              </div>
+              {attandance.id ? (
+                <StudentList />
+              ) : attandance.length ? (
+                <div className="w-4/5 flex justify-center mx-auto mt-10 p-3 shadow-2xl">
+                  <Datapicker />
+                  <Toast />
+                </div>
+              ) : (
+                <div className="w-4/5 flex justify-center mx-auto mt-10 p-3 shadow-2xl">
+                  <Datapicker />
+                </div>
+              )}
             </div>
           ) : null}
         </div>

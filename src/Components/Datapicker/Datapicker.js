@@ -1,11 +1,13 @@
 import * as React from "react";
-import dayjs from "dayjs";
 import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { useSelector, useDispatch } from "react-redux";
 import { setActiveDate } from "../check_slice";
+import { useNavigate } from "react-router-dom";
+import { createAttandance } from "../check_slice";
+import { read_cookie } from "sfcookies";
 
 const isWeekend = (date) => {
   const day = date.day();
@@ -15,8 +17,17 @@ const isWeekend = (date) => {
 
 export default function Datapicker() {
   const dispatch = useDispatch();
-  const { activeDate } = useSelector((state) => state.groups);
-  console.log(activeDate);
+  const { activeDate, activeSubject, attandance } = useSelector(
+    (state) => state.groups
+  );
+  const navigate = useNavigate();
+  const token = read_cookie("access_token");
+
+  const attandanceCreate = () => {
+    dispatch(
+      createAttandance({ subjectId: activeSubject, date: activeDate, token })
+    );
+  };
 
   const validDate = (item) => {
     if (item.length === 1) {
@@ -41,6 +52,9 @@ export default function Datapicker() {
         shouldDisableDate={isWeekend}
         onChange={(newValue) => {
           dispatch(setActiveDate(sentDate(newValue)));
+        }}
+        onAccept={() => {
+          attandanceCreate();
         }}
         renderInput={(params) => <TextField {...params} />}
       />

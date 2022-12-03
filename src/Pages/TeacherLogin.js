@@ -60,6 +60,11 @@ export default function TeacherLogin() {
                 className=" bg-none text-secText outline-none bg-transparent w-full h-full placeholder:text-mainText placeholder:focus:opacity-50 duration-500 placeholder:text-lg"
                 placeholder="sevbo@gmail.com"
                 onChange={(e) => setEmail(e.target.value)}
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    return sendData();
+                  }
+                }}
               />
             </div>
           </div>
@@ -77,6 +82,11 @@ export default function TeacherLogin() {
                 className=" bg-none text-secText outline-none bg-transparent w-full h-full placeholder:text-mainText placeholder:focus:opacity-50 duration-500 placeholder:text-lg"
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="***********"
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    return sendData();
+                  }
+                }}
               />
             </div>
           </div>

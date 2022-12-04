@@ -28,6 +28,15 @@
   color: #61dafb;
 }
 
+.check:checked + label {
+  background-color: #248bda;
+}
+
+.check:checked + label i {
+  display: inline;
+  color: white;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

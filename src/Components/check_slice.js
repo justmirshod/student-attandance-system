@@ -89,12 +89,18 @@ export const groupSlice = createSlice({
       state.activeDate = currentDate;
       state.attandance = {};
       state.students = {};
+      state.isLoading = "";
+      state.isLoading1 = "";
+      state.isLoading2 = "";
     },
     setActiveGroup: (state, { payload }) => {
       state.activeGroupId = payload;
       state.attandance = {};
       state.students = {};
       state.activeDate = currentDate;
+      state.isLoading = "";
+      state.isLoading1 = "";
+      state.isLoading2 = "";
     },
     setActiveDate: (state, { payload }) => {
       state.activeDate = payload;
@@ -133,7 +139,7 @@ export const groupSlice = createSlice({
       })
       .addCase(fetchStudents.fulfilled, (state, { payload }) => {
         state.students = payload;
-        state.isLoading2 = true;
+        state.isLoading2 = false;
       })
       .addCase(fetchStudents.rejected, (state) => {
         state.isLoading2 = "error";

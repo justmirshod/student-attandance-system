@@ -15,7 +15,7 @@ export default function StudentList() {
   }, []);
 
   return (
-    <div className="student_list px-5 py-7 w-[90%] mx-auto rounded-xl mt-10">
+    <div className="student_list px-5 py-7 w-[90%] shadow-xl mx-auto rounded-xl mt-10 overflow-y-scroll h-[600px]">
       {isLoading2 ? (
         "Loading..."
       ) : isLoading2 === false ? (

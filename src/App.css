@@ -28,12 +28,28 @@
   color: #61dafb;
 }
 
-.check:checked + label {
+.check:checked + .pres {
   background-color: #248bda;
+}
+
+.check:checked + .abcent {
+  background-color: rgb(240, 50, 50);
+}
+
+.check:checked + .late {
+  background-color: rgb(228, 153, 15);
 }
 
 .check:checked + label i {
   display: inline;
+  color: white;
+}
+
+.check + label:hover {
+  background-color: rgb(221, 221, 221);
+}
+
+.check + label:hover i {
   color: white;
 }
 

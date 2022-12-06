@@ -33,11 +33,11 @@
 }
 
 .check:checked + .abcent {
-  background-color: rgb(240, 50, 50);
+  background-color: #f03232;
 }
 
 .check:checked + .late {
-  background-color: rgb(228, 153, 15);
+  background-color: #e4990f;
 }
 
 .check:checked + label i {
@@ -51,6 +51,10 @@
 
 .check + label:hover i {
   color: white;
+}
+
+.student-profile {
+  min-height: calc(100vh - 64px);
 }
 
 @keyframes App-logo-spin {

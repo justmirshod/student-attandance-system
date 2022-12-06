@@ -12,6 +12,7 @@ import { read_cookie } from "sfcookies";
 import { loginTeacher } from "./Components/TeacherLogin/login_slice";
 import CheckAttandance from "./Pages/CheckAttandance";
 import TakeAttandance from "./Pages/TakeAttandace";
+import OneStudentStatus from "./Pages/OneStudentStatus";
 
 const Routing = () => {
   const navigate = useNavigate();
@@ -20,14 +21,6 @@ const Routing = () => {
   const user = read_cookie("user");
   const access = read_cookie("access_token");
 
-  const navigatePage = (path) => {
-    if (location.pathname === path) {
-      return navigate(path);
-    } else {
-      return navigate("/");
-    }
-  };
-
   useEffect(() => {
     if (typeof access !== "object") {
       if (location.pathname === "/teacher-login") {
@@ -35,16 +28,18 @@ const Routing = () => {
       }
       dispatch(loginTeacher({ user }));
     } else {
-      if (location.pathname === "/") {
-        return navigate("/");
+      if (location.pathname === "/" || "/student/id") {
+        return navigate(location.pathname);
       }
-      navigate("/teacher-login");
+
+      return navigate("/teacher-login");
     }
   }, [location.pathname]);
 
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/student/id" element={<OneStudentStatus />} />
       {typeof access !== "object" ? null : (
         <Route path={"/teacher-login"} element={<TeacherLogin />} />
       )}

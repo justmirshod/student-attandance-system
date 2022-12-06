@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { fetchStudents } from "../check_slice";
+import { postAttandance } from "./student_slice";
 import { useEffect } from "react";
 import { read_cookie } from "sfcookies";
 
@@ -7,8 +8,16 @@ export default function StudentList() {
   const { students, activeGroupId, activeDate, isLoading2 } = useSelector(
     (state) => state.groups
   );
+  const attandanceId = useSelector((state) => state.groups.attandance.id);
+  const attandance = useSelector((state) => state.attandance);
+  // const attand_student = useSelector((state) => state.attandance.students);
+
   const dispatch = useDispatch();
   const token = read_cookie("access_token");
+
+  const addAtt = (studentId, attandanceId, status) => {
+    dispatch(postAttandance({ studentId, attandanceId, status, token }));
+  };
 
   useEffect(() => {
     dispatch(fetchStudents({ groupId: activeGroupId, token }));
@@ -71,11 +80,17 @@ export default function StudentList() {
                             <input
                               id={`default-radio-${item.id}`}
                               type="radio"
-                              value=""
+                              value="present"
                               name={`default-radio-${item.id}`}
+                              disabled={
+                                attandance.students.id &&
+                                attandance.students.student === item.id
+                                  ? true
+                                  : false
+                              }
                               className="hidden check w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                               onChange={(e) => {
-                                console.log(e.target.value);
+                                addAtt(item.id, attandanceId, e.target.value);
                               }}
                             />
                             <label
@@ -91,11 +106,17 @@ export default function StudentList() {
                             <input
                               id={`default-radio-${item.id}-${item.id + 1}`}
                               type="radio"
-                              value=""
+                              value="absent"
                               name={`default-radio-${item.id}`}
                               className="hidden check w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              disabled={
+                                attandance.students.id &&
+                                attandance.students.student === item.id
+                                  ? true
+                                  : false
+                              }
                               onChange={(e) => {
-                                console.log(e.target.value);
+                                addAtt(item.id, attandanceId, e.target.value);
                               }}
                             />
                             <label
@@ -113,11 +134,17 @@ export default function StudentList() {
                             <input
                               id={`default-radio-${item.id}-${item.id + 2}`}
                               type="radio"
-                              value=""
+                              value="late"
                               name={`default-radio-${item.id}`}
                               className="hidden check w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                              disabled={
+                                attandance.students.id &&
+                                attandance.students.student === item.id
+                                  ? true
+                                  : false
+                              }
                               onChange={(e) => {
-                                console.log(e.target.value);
+                                addAtt(item.id, attandanceId, e.target.value);
                               }}
                             />
                             <label

@@ -5,6 +5,8 @@ const initialState = {
   dateLoading: false,
   students: [],
   attandanceId: [],
+  previuoslyCheckedStudents: [],
+  previuoslyCheckedStudentsLoading: false,
 };
 
 export const postAttandance = createAsyncThunk(
@@ -43,15 +45,33 @@ export const defineAttandanceDate = createAsyncThunk(
   }
 );
 
+export const fetchPreviuoslyCheckedStudents = createAsyncThunk(
+  "students/previuoslyChecked",
+  async ({ groupId, token, attandanceId }) => {
+    return await fetch(
+      `http://127.0.0.1:8000//attendance/attendances/${attandanceId}/reports/?group=${groupId}`,
+      {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => data);
+  }
+);
+
 export const studentSlice = createSlice({
   name: "attandance",
   initialState,
   reducers: {
     clearStudents: (state) => {
       state.attandanceId = [];
-      state.attandanceId = [];
+      state.students = [];
       state.attandanceLoading = false;
       state.dateLoading = false;
+      state.previuoslyCheckedStudents = [];
     },
   },
   extraReducers: (builder) => {
@@ -80,6 +100,19 @@ export const studentSlice = createSlice({
       })
       .addCase(defineAttandanceDate.rejected, (state) => {
         state.dateLoading = "error";
+      })
+      .addCase(fetchPreviuoslyCheckedStudents.pending, (state) => {
+        state.previuoslyCheckedStudentsLoading = true;
+      })
+      .addCase(
+        fetchPreviuoslyCheckedStudents.fulfilled,
+        (state, { payload }) => {
+          state.previuoslyCheckedStudentsLoading = false;
+          state.previuoslyCheckedStudents = payload;
+        }
+      )
+      .addCase(fetchPreviuoslyCheckedStudents.rejected, (state) => {
+        state.previuoslyCheckedStudentsLoading = "error";
       });
   },
 });

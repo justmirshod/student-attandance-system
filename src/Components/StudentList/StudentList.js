@@ -1,16 +1,29 @@
 import { useSelector, useDispatch } from "react-redux";
 import { fetchStudents } from "../check_slice";
-import { postAttandance, defineAttandanceDate } from "./student_slice";
+import {
+  postAttandance,
+  defineAttandanceDate,
+  fetchPreviuoslyCheckedStudents,
+} from "./student_slice";
 import { useEffect } from "react";
 import { read_cookie } from "sfcookies";
 
 export default function StudentList() {
-  const { students, activeGroupId, activeDate, isLoading2 } = useSelector(
-    (state) => state.groups
-  );
-  const attandanceId = useSelector((state) => state.groups.attandance.id);
+  const { students, activeGroupId, activeDate, isLoading2, activeSubject } =
+    useSelector((state) => state.groups);
+  const attandanceId = useSelector((state) => {
+    if (state.attandance.attandanceId[0]) {
+      return state.attandance.attandanceId.filter(
+        (item) => item.subject_id === +activeSubject
+      )[0].attendance_id;
+    } else {
+      return null;
+    }
+  });
   const attandance = useSelector((state) => state.attandance);
-  // const attand_student = useSelector((state) => state.attandance.students);
+  const { previuoslyCheckedStudents } = useSelector(
+    (state) => state.attandance
+  );
 
   const dispatch = useDispatch();
   const token = read_cookie("access_token");
@@ -23,6 +36,18 @@ export default function StudentList() {
     dispatch(defineAttandanceDate({ date: activeDate, token }));
     dispatch(fetchStudents({ groupId: activeGroupId, token }));
   }, []);
+
+  useEffect(() => {
+    if (attandanceId) {
+      dispatch(
+        fetchPreviuoslyCheckedStudents({
+          token,
+          groupId: activeGroupId,
+          attandanceId,
+        })
+      );
+    }
+  }, [attandanceId]);
 
   return (
     <div className="h-screen pt-10 overflow-y-scroll">
@@ -68,7 +93,9 @@ export default function StudentList() {
                     {students.results.map((item, index, arr) => (
                       <tr
                         key={item.id}
-                        className={index !== arr.length - 1 ? "border-b" : null}
+                        className={`${
+                          index !== arr.length - 1 ? "border-b" : null
+                        } relative`}
                       >
                         <td className="p-2">
                           <div className="leading-tight">{`${item.first_name} ${item.last_name}`}</div>
@@ -164,6 +191,18 @@ export default function StudentList() {
                             </label>
                           </div>
                         </td>
+                        {/* <td className="w-full">
+                          <h1 className="text-center block">
+                            Attendance already taken from this student. To
+                            change it please invite update page on the left side
+                            of the screen
+                          </h1>
+                        </td> */}
+                        <div className="absolute top-0 left-0 h-full w-full">
+                          <div className="h-full ml-auto w-3/5 text-center bg-white opacity-90 flex items-center text-red-500">
+                            Attendance was already taken from this student
+                          </div>
+                        </div>
                       </tr>
                     ))}
                   </tbody>

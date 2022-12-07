@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { fetchStudents } from "../check_slice";
-import { postAttandance } from "./student_slice";
+import { postAttandance, defineAttandanceDate } from "./student_slice";
 import { useEffect } from "react";
 import { read_cookie } from "sfcookies";
 
@@ -20,6 +20,7 @@ export default function StudentList() {
   };
 
   useEffect(() => {
+    dispatch(defineAttandanceDate({ date: activeDate, token }));
     dispatch(fetchStudents({ groupId: activeGroupId, token }));
   }, []);
 
@@ -83,8 +84,10 @@ export default function StudentList() {
                               value="present"
                               name={`default-radio-${item.id}`}
                               disabled={
-                                attandance.students.id &&
-                                attandance.students.student === item.id
+                                attandance.students[0] &&
+                                attandance.students.findIndex(
+                                  (student) => student.student === item.id
+                                ) !== -1
                                   ? true
                                   : false
                               }
@@ -110,8 +113,10 @@ export default function StudentList() {
                               name={`default-radio-${item.id}`}
                               className="hidden check w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                               disabled={
-                                attandance.students.id &&
-                                attandance.students.student === item.id
+                                attandance.students[0] &&
+                                attandance.students.findIndex(
+                                  (student) => student.student === item.id
+                                ) !== -1
                                   ? true
                                   : false
                               }
@@ -138,8 +143,10 @@ export default function StudentList() {
                               name={`default-radio-${item.id}`}
                               className="hidden check w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                               disabled={
-                                attandance.students.id &&
-                                attandance.students.student === item.id
+                                attandance.students[0] &&
+                                attandance.students.findIndex(
+                                  (student) => student.student === item.id
+                                ) !== -1
                                   ? true
                                   : false
                               }

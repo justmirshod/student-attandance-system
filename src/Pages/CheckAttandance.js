@@ -13,6 +13,7 @@ import {
 import Datapicker from "../Components/Datapicker/Datapicker";
 import StudentList from "../Components/StudentList/StudentList";
 import Toast from "../Components/Toast";
+import { clearStudents } from "../Components/StudentList/student_slice";
 
 export default function CheckAttandance() {
   const { data } = useSelector((state) => state.login);
@@ -29,13 +30,13 @@ export default function CheckAttandance() {
     }
   }, []);
 
-  useEffect(() => {
-    if (attandance.length) {
-      notify(attandance[0], "error");
-      // dispatch(clearAttandance());
-      return;
-    }
-  }, [attandance]);
+  // useEffect(() => {
+  //   if (attandance.length) {
+  //     notify(attandance[0], "error");
+  //     // dispatch(clearAttandance());
+  //     return;
+  //   }
+  // }, [attandance]);
 
   useEffect(() => {
     if (data.user) {
@@ -64,9 +65,10 @@ export default function CheckAttandance() {
                         checked={item.id == activeSubject}
                         name="bordered-radio"
                         className="w-4 border-none h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
-                        onChange={(e) =>
-                          dispatch(setActiveSubject(e.target.value))
-                        }
+                        onChange={(e) => {
+                          dispatch(setActiveSubject(e.target.value));
+                          dispatch(clearStudents());
+                        }}
                       />
                       <label
                         htmlFor={`bordered-radio-${item.id}`}
@@ -97,9 +99,10 @@ export default function CheckAttandance() {
                             value={item.id}
                             checked={item.id == activeGroupId}
                             className="hidden peer"
-                            onChange={(e) =>
-                              dispatch(setActiveGroup(e.target.value))
-                            }
+                            onChange={(e) => {
+                              dispatch(setActiveGroup(e.target.value));
+                              dispatch(clearStudents());
+                            }}
                           />
                           <label
                             htmlFor={item.id}
@@ -133,13 +136,8 @@ export default function CheckAttandance() {
           </div>
           {groups.length && activeSubject && activeGroupId ? (
             <div className="w-3/5 min-h-screen">
-              {attandance.id ? (
+              {attandance.id || attandance.length ? (
                 <StudentList />
-              ) : attandance.length ? (
-                <div className="w-4/5 flex justify-center mx-auto mt-10 p-3 shadow-2xl">
-                  <Datapicker />
-                  <Toast />
-                </div>
               ) : (
                 <div className="w-4/5 flex justify-center mx-auto mt-10 p-3 shadow-2xl">
                   <Datapicker />

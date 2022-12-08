@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const date = new Date();
@@ -16,13 +15,14 @@ const currentDate = `${validDate(date.getFullYear().toString())}-${validDate(
 )}-${validDate(date.getDate().toString())}`;
 
 const initialState = {
+  createAttendanceLoading: false,
+  fetchStudentsLoading: false,
+  fetchGroupsLoading: false,
+  addExtraDataLoading: false,
   groups: {},
   activeGroupId: "",
   activeSubject: "",
-  isLoading: false,
   activeDate: currentDate,
-  isLoading1: "",
-  isLoading2: "",
   attandance: {},
   students: {},
 };
@@ -89,18 +89,18 @@ export const groupSlice = createSlice({
       state.activeDate = currentDate;
       state.attandance = {};
       state.students = {};
-      state.isLoading = "";
-      state.isLoading1 = "";
-      state.isLoading2 = "";
+      state.fetchGroupsLoading = false;
+      state.createAttendanceLoading = false;
+      state.fetchStudentsLoading = false;
     },
     setActiveGroup: (state, { payload }) => {
       state.activeGroupId = payload;
       state.attandance = {};
       state.students = {};
       state.activeDate = currentDate;
-      state.isLoading = "";
-      state.isLoading1 = "";
-      state.isLoading2 = "";
+      state.fetchGroupsLoading = false;
+      state.createAttendanceLoading = false;
+      state.fetchStudentsLoading = false;
     },
     setActiveDate: (state, { payload }) => {
       state.activeDate = payload;
@@ -112,42 +112,47 @@ export const groupSlice = createSlice({
       state.attandance = {};
     },
     addExtraDataToExistStudens: (state, { payload }) => {
+      state.addExtraDataLoading = true;
       state.students.results.filter(
         (item) => item.id === payload.id
       )[0].extraData = payload.data;
+      state.addExtraDataLoading = false;
+    },
+    setExtraDataLoading: (state) => {
+      state.addExtraDataLoading = true;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchGroups.pending, (state) => {
-        state.isLoading = true;
+        state.fetchGroupsLoading = true;
       })
       .addCase(fetchGroups.fulfilled, (state, { payload }) => {
         state.groups = payload;
-        state.isLoading = false;
+        state.fetchGroupsLoading = false;
       })
       .addCase(fetchGroups.rejected, (state) => {
-        state.isLoading = "error";
+        state.fetchGroupsLoading = "error";
       })
       .addCase(createAttandance.pending, (state) => {
-        state.isLoading1 = true;
+        state.createAttendanceLoading = true;
       })
       .addCase(createAttandance.fulfilled, (state, { payload }) => {
         state.attandance = payload;
-        state.isLoading1 = false;
+        state.createAttendanceLoading = false;
       })
       .addCase(createAttandance.rejected, (state) => {
-        state.isLoading1 = "error";
+        state.createAttendanceLoading = "error";
       })
       .addCase(fetchStudents.pending, (state) => {
-        state.isLoading2 = true;
+        state.fetchStudentsLoading = true;
       })
       .addCase(fetchStudents.fulfilled, (state, { payload }) => {
         state.students = payload;
-        state.isLoading2 = false;
+        state.fetchStudentsLoading = false;
       })
       .addCase(fetchStudents.rejected, (state) => {
-        state.isLoading2 = "error";
+        state.fetchStudentsLoading = "error";
       });
   },
 });
@@ -159,5 +164,6 @@ export const {
   resetActiveDate,
   clearAttandance,
   addExtraDataToExistStudens,
+  setExtraDataLoading,
 } = groupSlice.actions;
 export default groupSlice.reducer;

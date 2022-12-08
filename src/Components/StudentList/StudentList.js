@@ -1,5 +1,9 @@
 import { useSelector, useDispatch } from "react-redux";
-import { fetchStudents, addExtraDataToExistStudens } from "../check_slice";
+import {
+  fetchStudents,
+  addExtraDataToExistStudens,
+  setExtraDataLoading,
+} from "../check_slice";
 import {
   postAttandance,
   defineAttandanceDate,
@@ -9,8 +13,14 @@ import { useEffect } from "react";
 import { read_cookie } from "sfcookies";
 
 export default function StudentList() {
-  const { students, activeGroupId, activeDate, isLoading2, activeSubject } =
-    useSelector((state) => state.groups);
+  const {
+    students,
+    activeGroupId,
+    activeDate,
+    fetchStudentsLoading,
+    activeSubject,
+    addExtraDataLoading,
+  } = useSelector((state) => state.groups);
   const attandanceId = useSelector((state) => {
     if (state.attandance.attandanceId[0]) {
       return state.attandance.attandanceId.filter(
@@ -21,9 +31,8 @@ export default function StudentList() {
     }
   });
   const attandance = useSelector((state) => state.attandance);
-  const { previuoslyCheckedStudents } = useSelector(
-    (state) => state.attandance
-  );
+  const { previuoslyCheckedStudents, previuoslyCheckedStudentsLoading } =
+    useSelector((state) => state.attandance);
 
   const dispatch = useDispatch();
   const token = read_cookie("access_token");
@@ -36,6 +45,8 @@ export default function StudentList() {
     dispatch(defineAttandanceDate({ date: activeDate, token }));
     dispatch(fetchStudents({ groupId: activeGroupId, token }));
   }, []);
+
+  // tepadagi useeffectda render qilishda xato qilyapti faqat kirganda emas nimalardir o'zgarganda ham render qilyapti shuni to'g'irlash kerak
 
   useEffect(() => {
     if (attandanceId) {
@@ -69,9 +80,9 @@ export default function StudentList() {
   return (
     <div className="h-screen pt-10 overflow-y-scroll">
       <div className="student_list px-5 py-7 w-[90%] shadow-xl mx-auto rounded-xl">
-        {isLoading2 ? (
+        {fetchStudentsLoading || previuoslyCheckedStudentsLoading ? (
           "Loading..."
-        ) : isLoading2 === false ? (
+        ) : !fetchStudentsLoading && !previuoslyCheckedStudentsLoading ? (
           <>
             {students.total > 0 ? (
               <>
@@ -120,136 +131,153 @@ export default function StudentList() {
                             {item.email}
                           </div>
                         </td>
-                        {item.extraData ? (
-                          <div className="absolute w-full h-full top-0 left-0">
-                            <div className="w-1/2 ml-auto h-full text-center flex justify-center items-center">
-                              <div className="align-middle">
-                                <span className="mr-2">Attandance taken!</span>
-                                <span
-                                  className={`w-5 h-5 inline-flex items-center justify-center rounded-full ${
-                                    item.extraData.status === "present"
-                                      ? "bg-buttonMain"
-                                      : item.extraData.status === "absent"
-                                      ? "bg-[#f03232]"
-                                      : "bg-[#e4990f]"
-                                  }`}
-                                >
-                                  <i
-                                    className={`text-white fa-solid text-[10px] ${
-                                      item.extraData.status === "present"
-                                        ? "fa-check"
-                                        : item.extraData.status === "absent"
-                                        ? "fa-xmark"
-                                        : "fa-hourglass-start"
-                                    }`}
-                                  ></i>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ) : (
+                        {addExtraDataLoading ? (
+                          "Loading..."
+                        ) : !addExtraDataLoading ? (
                           <>
-                            <td>
-                              <div className="flex items-center mb-4">
-                                <input
-                                  id={`default-radio-${item.id}`}
-                                  type="radio"
-                                  value="present"
-                                  name={`default-radio-${item.id}`}
-                                  disabled={
-                                    attandance.students[0] &&
-                                    attandance.students.findIndex(
-                                      (student) => student.student === item.id
-                                    ) !== -1
-                                      ? true
-                                      : false
-                                  }
-                                  className="hidden check w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                  onChange={(e) => {
-                                    addAtt(
-                                      item.id,
-                                      attandanceId,
-                                      e.target.value
-                                    );
-                                  }}
-                                />
-                                <label
-                                  htmlFor={`default-radio-${item.id}`}
-                                  className="w-7 h-7 pres border rounded-full flex items-center justify-center mt-4 focus:bg-buttonMain"
-                                >
-                                  <i className=" text-gray-400 hover:text-white fa-solid fa-check"></i>{" "}
-                                </label>
+                            {item.extraData ? (
+                              <div className="absolute w-full h-full top-0 left-0">
+                                <div className="w-1/2 ml-auto h-full text-center flex justify-center items-center">
+                                  <div className="align-middle">
+                                    <span className="mr-2">
+                                      Attandance taken!
+                                    </span>
+                                    <span
+                                      className={`w-5 h-5 inline-flex items-center justify-center rounded-full ${
+                                        item.extraData.status === "present"
+                                          ? "bg-buttonMain"
+                                          : item.extraData.status === "absent"
+                                          ? "bg-[#f03232]"
+                                          : "bg-[#e4990f]"
+                                      }`}
+                                    >
+                                      <i
+                                        className={`text-white fa-solid text-[10px] ${
+                                          item.extraData.status === "present"
+                                            ? "fa-check"
+                                            : item.extraData.status === "absent"
+                                            ? "fa-xmark"
+                                            : "fa-hourglass-start"
+                                        }`}
+                                      ></i>
+                                    </span>
+                                  </div>
+                                </div>
                               </div>
-                            </td>
-                            <td>
-                              <div className="flex items-center mb-4">
-                                <input
-                                  id={`default-radio-${item.id}-${item.id + 1}`}
-                                  type="radio"
-                                  value="absent"
-                                  name={`default-radio-${item.id}`}
-                                  className="hidden check w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                  disabled={
-                                    attandance.students[0] &&
-                                    attandance.students.findIndex(
-                                      (student) => student.student === item.id
-                                    ) !== -1
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={(e) => {
-                                    addAtt(
-                                      item.id,
-                                      attandanceId,
-                                      e.target.value
-                                    );
-                                  }}
-                                />
-                                <label
-                                  htmlFor={`default-radio-${item.id}-${
-                                    item.id + 1
-                                  }`}
-                                  className="w-7 h-7 abcent border rounded-full flex items-center justify-center mt-4 focus:bg-buttonMain"
-                                >
-                                  <i className="text-gray-400 hover:text-white fa-solid fa-xmark"></i>{" "}
-                                </label>
-                              </div>
-                            </td>
-                            <td>
-                              <div className="flex items-center mb-4">
-                                <input
-                                  id={`default-radio-${item.id}-${item.id + 2}`}
-                                  type="radio"
-                                  value="late"
-                                  name={`default-radio-${item.id}`}
-                                  className="hidden check w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                  disabled={
-                                    attandance.students[0] &&
-                                    attandance.students.findIndex(
-                                      (student) => student.student === item.id
-                                    ) !== -1
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={(e) => {
-                                    addAtt(
-                                      item.id,
-                                      attandanceId,
-                                      e.target.value
-                                    );
-                                  }}
-                                />
-                                <label
-                                  htmlFor={`default-radio-${item.id}-${
-                                    item.id + 2
-                                  }`}
-                                  className=" late w-7 h-7 abcent border rounded-full flex items-center justify-center mt-4 focus:bg-buttonMain"
-                                >
-                                  <i className="text-sm text-gray-400 hover:text-white fa-solid fa-hourglass-start"></i>{" "}
-                                </label>
-                              </div>
-                            </td>
+                            ) : (
+                              <>
+                                <td>
+                                  <div className="flex items-center mb-4">
+                                    <input
+                                      id={`default-radio-${item.id}`}
+                                      type="radio"
+                                      value="present"
+                                      name={`default-radio-${item.id}`}
+                                      disabled={
+                                        attandance.students[0] &&
+                                        attandance.students.findIndex(
+                                          (student) =>
+                                            student.student === item.id
+                                        ) !== -1
+                                          ? true
+                                          : false
+                                      }
+                                      className="hidden check w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                      onChange={(e) => {
+                                        addAtt(
+                                          item.id,
+                                          attandanceId,
+                                          e.target.value
+                                        );
+                                      }}
+                                    />
+                                    <label
+                                      htmlFor={`default-radio-${item.id}`}
+                                      className="w-7 h-7 pres border rounded-full flex items-center justify-center mt-4 focus:bg-buttonMain"
+                                    >
+                                      <i className=" text-gray-400 hover:text-white fa-solid fa-check"></i>{" "}
+                                    </label>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="flex items-center mb-4">
+                                    <input
+                                      id={`default-radio-${item.id}-${
+                                        item.id + 1
+                                      }`}
+                                      type="radio"
+                                      value="absent"
+                                      name={`default-radio-${item.id}`}
+                                      className="hidden check w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                      disabled={
+                                        attandance.students[0] &&
+                                        attandance.students.findIndex(
+                                          (student) =>
+                                            student.student === item.id
+                                        ) !== -1
+                                          ? true
+                                          : false
+                                      }
+                                      onChange={(e) => {
+                                        addAtt(
+                                          item.id,
+                                          attandanceId,
+                                          e.target.value
+                                        );
+                                      }}
+                                    />
+                                    <label
+                                      htmlFor={`default-radio-${item.id}-${
+                                        item.id + 1
+                                      }`}
+                                      className="w-7 h-7 abcent border rounded-full flex items-center justify-center mt-4 focus:bg-buttonMain"
+                                    >
+                                      <i className="text-gray-400 hover:text-white fa-solid fa-xmark"></i>{" "}
+                                    </label>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div className="flex items-center mb-4">
+                                    <input
+                                      id={`default-radio-${item.id}-${
+                                        item.id + 2
+                                      }`}
+                                      type="radio"
+                                      value="late"
+                                      name={`default-radio-${item.id}`}
+                                      className="hidden check w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                      disabled={
+                                        attandance.students[0] &&
+                                        attandance.students.findIndex(
+                                          (student) =>
+                                            student.student === item.id
+                                        ) !== -1
+                                          ? true
+                                          : false
+                                      }
+                                      onChange={(e) => {
+                                        addAtt(
+                                          item.id,
+                                          attandanceId,
+                                          e.target.value
+                                        );
+                                      }}
+                                    />
+                                    <label
+                                      htmlFor={`default-radio-${item.id}-${
+                                        item.id + 2
+                                      }`}
+                                      className=" late w-7 h-7 abcent border rounded-full flex items-center justify-center mt-4 focus:bg-buttonMain"
+                                    >
+                                      <i className="text-sm text-gray-400 hover:text-white fa-solid fa-hourglass-start"></i>{" "}
+                                    </label>
+                                  </div>
+                                </td>
+                              </>
+                            )}
                           </>
+                        ) : (
+                          "Error"
                         )}
                       </tr>
                     ))}
@@ -260,9 +288,9 @@ export default function StudentList() {
               "Nothing found"
             )}
           </>
-        ) : isLoading2 === "error" ? (
+        ) : (
           <h1>Error</h1>
-        ) : null}
+        )}
       </div>
     </div>
   );

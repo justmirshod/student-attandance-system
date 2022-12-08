@@ -3,10 +3,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 const initialState = {
   attandanceLoading: false,
   dateLoading: false,
+  previuoslyCheckedStudentsLoading: false,
   students: [],
   attandanceId: [],
   previuoslyCheckedStudents: [],
-  previuoslyCheckedStudentsLoading: false,
 };
 
 export const postAttandance = createAsyncThunk(

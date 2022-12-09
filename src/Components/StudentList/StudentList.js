@@ -3,6 +3,7 @@ import {
   fetchStudents,
   addExtraDataToExistStudens,
   setExtraDataLoading,
+  stopExtraDataLoading,
 } from "../check_slice";
 import {
   postAttandance,
@@ -46,8 +47,6 @@ export default function StudentList() {
     dispatch(fetchStudents({ groupId: activeGroupId, token }));
   }, []);
 
-  // tepadagi useeffectda render qilishda xato qilyapti faqat kirganda emas nimalardir o'zgarganda ham render qilyapti shuni to'g'irlash kerak
-
   useEffect(() => {
     if (attandanceId) {
       dispatch(
@@ -62,6 +61,7 @@ export default function StudentList() {
 
   useEffect(() => {
     if (previuoslyCheckedStudents.total > 0 && students.total > 0) {
+      dispatch(setExtraDataLoading());
       for (let student of students.results) {
         for (let item of previuoslyCheckedStudents.results) {
           if (student.id === item.student) {
@@ -74,6 +74,7 @@ export default function StudentList() {
           }
         }
       }
+      dispatch(stopExtraDataLoading());
     }
   }, [previuoslyCheckedStudents]);
 

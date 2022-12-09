@@ -112,14 +112,15 @@ export const groupSlice = createSlice({
       state.attandance = {};
     },
     addExtraDataToExistStudens: (state, { payload }) => {
-      state.addExtraDataLoading = true;
       state.students.results.filter(
         (item) => item.id === payload.id
       )[0].extraData = payload.data;
-      state.addExtraDataLoading = false;
     },
     setExtraDataLoading: (state) => {
       state.addExtraDataLoading = true;
+    },
+    stopExtraDataLoading: (state) => {
+      state.addExtraDataLoading = false;
     },
   },
   extraReducers: (builder) => {
@@ -165,5 +166,6 @@ export const {
   clearAttandance,
   addExtraDataToExistStudens,
   setExtraDataLoading,
+  stopExtraDataLoading,
 } = groupSlice.actions;
 export default groupSlice.reducer;

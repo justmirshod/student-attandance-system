@@ -5,9 +5,12 @@ const initialState = {
   studentAttandanceLoading: false,
   seeStudentList: [],
   attandanceId: [],
+  activeGroupStudents: [],
+  allStudentsLoading: false,
+  addExtraDataLoading: false,
 };
 
-const fecthSeenStudents = createAsyncThunk(
+export const fecthSeenStudents = createAsyncThunk(
   "see/studentsAttandance",
   async ({ attandanceId, groupId, token }) => {
     return await fetch(
@@ -40,6 +43,22 @@ export const fetchAttandanceDate = createAsyncThunk(
   }
 );
 
+export const fecthActiveGroupStudents = createAsyncThunk(
+  "students/fetch",
+  async ({ groupId, token }) => {
+    return await fetch(
+      `http://127.0.0.1:8000/attendance/groups/${groupId}/students/`,
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => data);
+  }
+);
+
 export const seeSlice = createSlice({
   name: "see",
   initialState,
@@ -49,6 +68,14 @@ export const seeSlice = createSlice({
       state.attandanceId = [];
       state.seeDateLoading = false;
       state.studentAttandanceLoading = false;
+    },
+    addExtraData: (state, { payload }) => {
+      state.activeGroupStudents.results.filter(
+        (item) => item.id === payload.id
+      )[0].extraData = payload.data;
+    },
+    setExtraDataLoading: (state, { payload }) => {
+      state.addExtraDataLoading = payload;
     },
   },
   extraReducers: (builder) => {
@@ -72,9 +99,20 @@ export const seeSlice = createSlice({
       })
       .addCase(fetchAttandanceDate.rejected, (state) => {
         state.seeDateLoading = "error";
+      })
+      .addCase(fecthActiveGroupStudents.pending, (state) => {
+        state.allStudentsLoading = true;
+      })
+      .addCase(fecthActiveGroupStudents.fulfilled, (state, { payload }) => {
+        state.activeGroupStudents = payload;
+        state.allStudentsLoading = false;
+      })
+      .addCase(fecthActiveGroupStudents.rejected, (state) => {
+        state.allStudentsLoading = "error";
       });
   },
 });
 
-export const { clearSeeAttandance } = seeSlice.actions;
+export const { clearSeeAttandance, addExtraData, setExtraDataLoading } =
+  seeSlice.actions;
 export default seeSlice.reducer;

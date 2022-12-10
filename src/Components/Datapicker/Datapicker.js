@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { createAttandance } from "../check_slice";
 import { read_cookie } from "sfcookies";
 import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { fetchAttandanceDate } from "../see_slice";
 
 const isWeekend = (date) => {
   const day = date.day();
@@ -45,6 +47,10 @@ export default function Datapicker() {
     )}-${validDate(value.$D.toString())}`;
   };
 
+  const seeAttandanceDate = () => {
+    dispatch(fetchAttandanceDate({ token, date: activeDate }));
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StaticDatePicker
@@ -58,6 +64,8 @@ export default function Datapicker() {
         onAccept={() => {
           if (location.pathname === "/check-attandance") {
             attandanceCreate();
+          } else {
+            seeAttandanceDate();
           }
         }}
         renderInput={(params) => <TextField {...params} />}

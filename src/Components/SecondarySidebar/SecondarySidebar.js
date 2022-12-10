@@ -8,6 +8,7 @@ import {
 import { clearStudents } from "../StudentList/student_slice";
 import { useEffect } from "react";
 import { read_cookie } from "sfcookies";
+import { clearSeeAttandance } from "../see_slice";
 
 export default function SecondarySidebar() {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ export default function SecondarySidebar() {
                   onChange={(e) => {
                     dispatch(setActiveSubject(e.target.value));
                     dispatch(clearStudents());
+                    dispatch(clearSeeAttandance());
                   }}
                 />
                 <label
@@ -83,6 +85,7 @@ export default function SecondarySidebar() {
                       onChange={(e) => {
                         dispatch(setActiveGroup(e.target.value));
                         dispatch(clearStudents());
+                        dispatch(clearSeeAttandance());
                       }}
                     />
                     <label

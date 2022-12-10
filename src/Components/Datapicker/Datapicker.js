@@ -8,6 +8,7 @@ import { setActiveDate } from "../check_slice";
 import { useNavigate } from "react-router-dom";
 import { createAttandance } from "../check_slice";
 import { read_cookie } from "sfcookies";
+import { useLocation } from "react-router-dom";
 
 const isWeekend = (date) => {
   const day = date.day();
@@ -16,6 +17,7 @@ const isWeekend = (date) => {
 };
 
 export default function Datapicker() {
+  const location = useLocation();
   const dispatch = useDispatch();
   const { activeDate, activeSubject, attandance } = useSelector(
     (state) => state.groups
@@ -54,7 +56,9 @@ export default function Datapicker() {
           dispatch(setActiveDate(sentDate(newValue)));
         }}
         onAccept={() => {
-          attandanceCreate();
+          if (location.pathname === "/check-attandance") {
+            attandanceCreate();
+          }
         }}
         renderInput={(params) => <TextField {...params} />}
       />

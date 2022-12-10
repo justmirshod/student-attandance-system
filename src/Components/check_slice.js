@@ -122,6 +122,17 @@ export const groupSlice = createSlice({
     stopExtraDataLoading: (state) => {
       state.addExtraDataLoading = false;
     },
+    clearAll: (state) => {
+      state.createAttendanceLoading = false;
+      state.fetchStudentsLoading = false;
+      state.fetchGroupsLoading = false;
+      state.addExtraDataLoading = false;
+      state.activeGroupId = "";
+      state.activeDate = currentDate;
+      state.activeSubject = "";
+      state.attandance = {};
+      state.students = {};
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -167,5 +178,6 @@ export const {
   addExtraDataToExistStudens,
   setExtraDataLoading,
   stopExtraDataLoading,
+  clearAll,
 } = groupSlice.actions;
 export default groupSlice.reducer;

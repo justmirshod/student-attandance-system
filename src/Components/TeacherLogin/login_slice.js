@@ -2,10 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   data: {},
-  isLoading: "",
-  activeUser: "",
-  userId: "",
-  subjects: [],
+  isLoading: false,
 };
 
 export const login = createAsyncThunk(

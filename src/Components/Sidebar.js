@@ -4,6 +4,7 @@ import { delete_cookie } from "sfcookies";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutTeacher } from "./TeacherLogin/login_slice";
 import { showContent, hideContent, toggleContent } from "./sidebar_slice";
+import { clearAll } from "./check_slice";
 export default function Sidebar() {
   const location = useLocation();
   const { show } = useSelector((state) => state.sidebar);
@@ -22,6 +23,10 @@ export default function Sidebar() {
     navigate("/teacher-login");
     window.location.reload();
   };
+
+  useEffect(() => {
+    dispatch(clearAll());
+  }, [location.pathname]);
 
   return (
     <div className="sidebar w-1/5 min-h-screen bg-navbar p-4 shadow-2xl">

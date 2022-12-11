@@ -13,6 +13,7 @@ import { loginTeacher } from "./Components/TeacherLogin/login_slice";
 import CheckAttandance from "./Pages/CheckAttandance";
 import TakeAttandance from "./Pages/TakeAttandace";
 import OneStudentStatus from "./Pages/OneStudentStatus";
+import UpdateAttandance from "./Pages/UpdateAttandance";
 
 const Routing = () => {
   const navigate = useNavigate();
@@ -20,13 +21,16 @@ const Routing = () => {
   const dispatch = useDispatch();
   const user = read_cookie("user");
   const access = read_cookie("access_token");
+  const { data } = useSelector((state) => state.login);
 
   useEffect(() => {
     if (typeof access !== "object") {
       if (location.pathname === "/teacher-login") {
         return navigate("/");
       }
-      dispatch(loginTeacher({ user }));
+      if (!data.user) {
+        dispatch(loginTeacher({ user }));
+      }
     } else {
       if (location.pathname === "/" || "/student/id") {
         return navigate(location.pathname);
@@ -46,6 +50,7 @@ const Routing = () => {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/check-attandance" element={<CheckAttandance />} />
       <Route path="/take-attandance" element={<TakeAttandance />} />
+      <Route path="/update-attandance" element={<UpdateAttandance />} />
     </Routes>
   );
 };

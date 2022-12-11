@@ -27,23 +27,23 @@ export default function TakeAttandance() {
           <SecondarySidebar />
           {groups.length && activeSubject && activeGroupId ? (
             <div className="w-3/5 min-h-screen">
-              <div className="w-4/5 flex justify-center mx-auto mt-10 p-3 shadow-2xl">
-                {seeDateLoading ? (
+              <div className="w-4/5 mx-auto mt-10 p-5 shadow-2xl rounded-lg">
+                {/* {seeDateLoading ? (
                   "Loading..."
-                ) : (
-                  <>
-                    {attandanceId.length ? (
-                      <SeeAttandance />
-                    ) : attandanceId.detail ? (
-                      <>
-                        <Datapicker />
-                        <Toast />
-                      </>
-                    ) : (
+                ) : ( */}
+                <>
+                  {attandanceId.length ? (
+                    <SeeAttandance />
+                  ) : attandanceId.detail ? (
+                    <>
                       <Datapicker />
-                    )}
-                  </>
-                )}
+                      <Toast />
+                    </>
+                  ) : (
+                    <Datapicker />
+                  )}
+                </>
+                {/* )} */}
               </div>
             </div>
           ) : null}

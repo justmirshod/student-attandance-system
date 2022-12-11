@@ -6,7 +6,7 @@ const initialState = {
   seeStudentList: [],
   attandanceId: [],
   activeGroupStudents: [],
-  allStudentsLoading: false,
+  allStudentsLoading: "",
   addExtraDataLoading: false,
 };
 
@@ -66,8 +66,10 @@ export const seeSlice = createSlice({
     clearSeeAttandance: (state) => {
       state.seeStudentList = [];
       state.attandanceId = [];
+      state.activeGroupStudents = [];
       state.seeDateLoading = false;
       state.studentAttandanceLoading = false;
+      state.allStudentsLoading = "";
     },
     addExtraData: (state, { payload }) => {
       state.activeGroupStudents.results.filter(

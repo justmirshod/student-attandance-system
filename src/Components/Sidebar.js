@@ -52,7 +52,11 @@ export default function Sidebar() {
             <span>Dashboard</span>
           </Link>
         </li>
-        <li className="text-secText p-2 rounded-xl duration-75">
+        <li
+          className={`text-secText p-2 rounded-xl duration-75 ${
+            show ? "mb-9" : null
+          } `}
+        >
           <div
             className={
               show
@@ -102,6 +106,19 @@ export default function Sidebar() {
               <Link to={"/take-attandance"} className="flex items-center">
                 <i className="fa-solid fa-eye mx-2"></i>
                 <span>See</span>
+              </Link>
+            </div>
+            <div
+              className={
+                location.pathname === "/update-attandance"
+                  ? "text-secText hover:bg-lightblue bg-lightblue p-2 rounded-xl  duration-75 mb-1 ml-1"
+                  : "text-secText hover:bg-lightblue  p-2 rounded-xl  duration-75 mb-1 ml-1"
+              }
+              onClick={() => dispatch(showContent())}
+            >
+              <Link to={"/update-attandance"} className="flex items-center">
+                <i className="fa-solid fa-pen-to-square mx-2"></i>
+                <span>Update</span>
               </Link>
             </div>
           </div>

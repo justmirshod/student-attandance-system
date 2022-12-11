@@ -5,8 +5,9 @@ import sidebar from "../Components/sidebar_slice";
 import groups from "../Components/check_slice";
 import attandance from "../Components/StudentList/student_slice";
 import see from "../Components/see_slice";
+import update from "../Components/edit_slice";
 
 export const store = configureStore({
-  reducer: { list, login, sidebar, groups, attandance, see },
+  reducer: { list, login, sidebar, groups, attandance, see, update },
   devTools: process.env.NODE_ENV !== "production",
 });

@@ -94,6 +94,11 @@ export const updateSlice = createSlice({
         (item) => item.id === payload.id
       )[0].extraData = payload.data;
     },
+    editStudent: (state, { payload }) => {
+      state.activeGroupStudents.results.filter(
+        (item) => item.id === payload.id
+      )[0].extraData.status = payload.status;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -128,5 +133,6 @@ export const updateSlice = createSlice({
   },
 });
 
-export const { addExtraData, setExtraDataLoading } = updateSlice.actions;
+export const { addExtraData, setExtraDataLoading, editStudent } =
+  updateSlice.actions;
 export default updateSlice.reducer;

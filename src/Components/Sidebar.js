@@ -52,6 +52,7 @@ export default function Sidebar() {
             <span>Dashboard</span>
           </Link>
         </li>
+        {/* {data.user.user_type === "teacher" ? } */}
         <li
           className={`text-secText p-2 rounded-xl duration-75 ${
             show ? "mb-9" : null

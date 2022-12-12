@@ -9,11 +9,15 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { read_cookie } from "sfcookies";
-import { loginTeacher } from "./Components/TeacherLogin/login_slice";
+import {
+  loginTeacher,
+  setIsStaticLoading,
+} from "./Components/TeacherLogin/login_slice";
 import CheckAttandance from "./Pages/CheckAttandance";
 import TakeAttandance from "./Pages/TakeAttandace";
 import OneStudentStatus from "./Pages/OneStudentStatus";
 import UpdateAttandance from "./Pages/UpdateAttandance";
+import Admin from "./Pages/Admin";
 
 const Routing = () => {
   const navigate = useNavigate();
@@ -51,6 +55,7 @@ const Routing = () => {
       <Route path="/check-attandance" element={<CheckAttandance />} />
       <Route path="/take-attandance" element={<TakeAttandance />} />
       <Route path="/update-attandance" element={<UpdateAttandance />} />
+      <Route path="/admin" element={<Admin />} />
     </Routes>
   );
 };

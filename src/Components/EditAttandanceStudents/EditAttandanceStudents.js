@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  editStudentAttandance,
   fecthActiveGroupStudents,
   seeCheckedStudentsList,
 } from "../edit_slice";
 import { read_cookie } from "sfcookies";
-import { setExtraDataLoading, addExtraData } from "../edit_slice";
+import { setExtraDataLoading, addExtraData, editStudent } from "../edit_slice";
 
 export default function EditAttandanceStudents() {
   const dispatch = useDispatch();
@@ -48,7 +49,10 @@ export default function EditAttandanceStudents() {
         for (let student of checkedStudentsList.results) {
           if (item.id === student.student) {
             dispatch(
-              addExtraData({ id: item.id, data: { status: student.status } })
+              addExtraData({
+                id: item.id,
+                data: { status: student.status, reportId: student.id },
+              })
             );
           }
         }
@@ -87,6 +91,7 @@ export default function EditAttandanceStudents() {
                             <tr className="border-b">
                               <td className="p-2 font-bold">Full Name</td>
                               <td className="font-bold text-center">Status</td>
+                              <td className="font-bold text-center">Action</td>
                             </tr>
                           </thead>
                           <tbody>
@@ -137,144 +142,33 @@ export default function EditAttandanceStudents() {
                                   </td>
                                   <td>
                                     {item.extraData ? (
-                                      <>
-                                        <button
-                                          id="dropdownHelperRadioButton"
-                                          data-dropdown-toggle="dropdownHelperRadio"
-                                          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                          type="button"
-                                        >
-                                          Dropdown radio{" "}
-                                          <svg
-                                            className="ml-2 w-4 h-4"
-                                            aria-hidden="true"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                          >
-                                            <path
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              strokeWidth="2"
-                                              d="M19 9l-7 7-7-7"
-                                            ></path>
-                                          </svg>
-                                        </button>
-
-                                        <div
-                                          id="dropdownHelperRadio"
-                                          className="hidden z-10 w-60 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                                          data-popper-reference-hidden=""
-                                          data-popper-escaped=""
-                                          data-popper-placement="top"
-                                          style={{
-                                            position: "absolute",
-                                            inset: "auto auto 0px 0px",
-                                            margin: 0,
-                                            transform:
-                                              "translate3d(522.5px, 6119.5px, 0px)",
+                                      <div className="flex items-center justify-center">
+                                        <select
+                                          value={item.extraData.status}
+                                          onChange={(e) => {
+                                            dispatch(
+                                              editStudent({
+                                                id: item.id,
+                                                status: e.target.value,
+                                              })
+                                            );
+                                            dispatch(
+                                              editStudentAttandance({
+                                                token,
+                                                reportId:
+                                                  item.extraData.reportId,
+                                                status: e.target.value,
+                                              })
+                                            );
                                           }}
                                         >
-                                          <ul
-                                            className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
-                                            aria-labelledby="dropdownHelperRadioButton"
-                                          >
-                                            <li>
-                                              <div className="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                <div className="flex items-center h-5">
-                                                  <input
-                                                    id={`helper-radio-${item.id}`}
-                                                    name={item.id}
-                                                    type="radio"
-                                                    value=""
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                                  />
-                                                </div>
-                                                <div className="ml-2 text-sm">
-                                                  <label
-                                                    htmlFor={`helper-radio-${item.id}`}
-                                                    className="font-medium text-gray-900 dark:text-gray-300"
-                                                  >
-                                                    <div>Individual</div>
-                                                    <p
-                                                      id={`helper-radio-text-${item.id}`}
-                                                      className="text-xs font-normal text-gray-500 dark:text-gray-300"
-                                                    >
-                                                      Some helpful instruction
-                                                      goes over here.
-                                                    </p>
-                                                  </label>
-                                                </div>
-                                              </div>
-                                            </li>
-                                            <li>
-                                              <div className="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                <div className="flex items-center h-5">
-                                                  <input
-                                                    id={`helper-radio-${
-                                                      item.id + 1
-                                                    }`}
-                                                    name={item.id}
-                                                    type="radio"
-                                                    value=""
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                                  />
-                                                </div>
-                                                <div className="ml-2 text-sm">
-                                                  <label
-                                                    htmlFor={`helper-radio-${
-                                                      item.id + 1
-                                                    }`}
-                                                    className="font-medium text-gray-900 dark:text-gray-300"
-                                                  >
-                                                    <div>Company</div>
-                                                    <p
-                                                      id="helper-radio-text-5"
-                                                      className="text-xs font-normal text-gray-500 dark:text-gray-300"
-                                                    >
-                                                      Some helpful instruction
-                                                      goes over here.
-                                                    </p>
-                                                  </label>
-                                                </div>
-                                              </div>
-                                            </li>
-                                            <li>
-                                              <div className="flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
-                                                <div className="flex items-center h-5">
-                                                  <input
-                                                    id={`helper-radio-${
-                                                      item.id + 2
-                                                    }`}
-                                                    name={item.id}
-                                                    type="radio"
-                                                    value=""
-                                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                                                  />
-                                                </div>
-                                                <div className="ml-2 text-sm">
-                                                  <label
-                                                    htmlFor={`helper-radio-${
-                                                      item.id + 2
-                                                    }`}
-                                                    className="font-medium text-gray-900 dark:text-gray-300"
-                                                  >
-                                                    <div>Non profit</div>
-                                                    <p
-                                                      id="helper-radio-text-6"
-                                                      className="text-xs font-normal text-gray-500 dark:text-gray-300"
-                                                    >
-                                                      Some helpful instruction
-                                                      goes over here.
-                                                    </p>
-                                                  </label>
-                                                </div>
-                                              </div>
-                                            </li>
-                                          </ul>
-                                        </div>
-                                      </>
+                                          <option value="present">
+                                            Present
+                                          </option>
+                                          <option value="absent">Absent</option>
+                                          <option value="late">Late</option>
+                                        </select>
+                                      </div>
                                     ) : (
                                       "Sorry, you have to check attandace firstly!"
                                     )}

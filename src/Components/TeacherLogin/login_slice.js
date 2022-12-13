@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
   data: {},
   isLoading: false,
-  isStaticLoading: false,
+  isStaticLoading: "",
 };
 
 export const login = createAsyncThunk(
@@ -29,9 +29,7 @@ export const loginSlice = createSlice({
   initialState,
   reducers: {
     loginTeacher: (state, { payload }) => {
-      state.isStaticLoading = true;
       state.data = payload;
-      state.isStaticLoading = false;
     },
     logOutTeacher: (state) => {
       state.data = {};

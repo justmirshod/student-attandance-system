@@ -17,35 +17,29 @@ export default function Dashboard() {
 
   return (
     <>
-      {data.isStaticLoading ? (
-        "Loading..."
-      ) : (
-        <div className="flex">
-          <Sidebar />
-          <div className="dash-main min-h-screen bg-home w-5/6">
-            <div className="content w-1/2 mx-auto my-32 text-lightgray">
-              {data.user ? (
-                <h1 className="text-xl mb-4">
-                  {isMorning
-                    ? "Good morning"
-                    : isAfternoon
-                    ? "Good afternoon"
-                    : isEvening
-                    ? "Good evening"
-                    : "Good morning"}{" "}
-                  {name[name.length - 1] === "a" ? "Mrs." : "Mr."} {name} ))
-                </h1>
-              ) : (
-                "Loading..."
-              )}
+      <div className="flex">
+        <Sidebar />
+        <div className="dash-main min-h-screen bg-home w-5/6">
+          <div className="content w-1/2 mx-auto my-32 text-lightgray">
+            {data.user ? (
+              <h1 className="text-xl mb-4">
+                {isMorning
+                  ? "Good morning"
+                  : isAfternoon
+                  ? "Good afternoon"
+                  : isEvening
+                  ? "Good evening"
+                  : "Good morning"}{" "}
+                {name[name.length - 1] === "a" ? "Mrs." : "Mr."} {name} ))
+              </h1>
+            ) : (
+              "Loading..."
+            )}
 
-              <p>
-                Here you can find brief information on how to use the site...
-              </p>
-            </div>
+            <p>Here you can find brief information on how to use the site...</p>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 }

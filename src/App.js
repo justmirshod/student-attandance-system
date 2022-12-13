@@ -29,18 +29,20 @@ const Routing = () => {
 
   useEffect(() => {
     if (typeof access !== "object") {
-      if (location.pathname === "/teacher-login") {
+      if (location.pathname === "/login") {
         return navigate("/");
       }
       if (!data.user) {
+        dispatch(setIsStaticLoading(true));
         dispatch(loginTeacher({ user }));
+        dispatch(setIsStaticLoading(false));
       }
     } else {
-      if (location.pathname === "/" || "/student/id") {
-        return navigate(location.pathname);
+      if (location.pathname === ("/" || "/student/id")) {
+        navigate(location.pathname);
+      } else {
+        navigate("/login");
       }
-
-      return navigate("/teacher-login");
     }
   }, [location.pathname]);
 
@@ -49,9 +51,12 @@ const Routing = () => {
       <Route path="/" element={<Home />} />
       <Route path="/student/id" element={<OneStudentStatus />} />
       {typeof access !== "object" ? null : (
-        <Route path={"/teacher-login"} element={<TeacherLogin />} />
+        <Route path={"/login"} element={<TeacherLogin />} />
       )}
-      <Route path="/dashboard" element={<Dashboard />} />
+      {typeof access !== "object" ? (
+        <Route path="/dashboard" element={<Dashboard />} />
+      ) : null}
+
       <Route path="/check-attandance" element={<CheckAttandance />} />
       <Route path="/take-attandance" element={<TakeAttandance />} />
       <Route path="/update-attandance" element={<UpdateAttandance />} />

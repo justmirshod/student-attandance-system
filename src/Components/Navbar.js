@@ -13,7 +13,7 @@ export default function Navbar() {
     delete_cookie("refresh_token");
     delete_cookie("user");
     dispatch(logOutTeacher());
-    navigate("/teacher-login");
+    navigate("/login");
     window.location.reload();
   };
 
@@ -51,7 +51,7 @@ export default function Navbar() {
                     Log out
                   </button>
                 ) : (
-                  <Link to="/teacher-login">
+                  <Link to="/login">
                     <button className="bg-buttonMain rounded-lg text-secText py-2 px-4 font-medium">
                       Teachers
                     </button>

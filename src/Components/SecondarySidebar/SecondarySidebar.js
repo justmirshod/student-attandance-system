@@ -12,9 +12,13 @@ import { clearSeeAttandance } from "../see_slice";
 
 export default function SecondarySidebar() {
   const dispatch = useDispatch();
-  const { groups, activeGroupId, activeSubject, attandance } = useSelector(
-    (state) => state.groups
-  );
+  const {
+    groups,
+    activeGroupId,
+    activeSubject,
+    attandance,
+    fetchGroupsLoading,
+  } = useSelector((state) => state.groups);
   const { data } = useSelector((state) => state.login);
 
   const token = read_cookie("access_token");
@@ -36,34 +40,40 @@ export default function SecondarySidebar() {
     <div className="w-2/5 min-h-screen check bg-home p-5">
       <h1 className="text-xl text-secText mb-2">Select subject</h1>
       <div className="flex items-center justify-between">
-        {groups.length
-          ? groups.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center pl-4 rounded-lg border w-[49%] border-gray-200 dark:border-gray-700"
-              >
-                <input
-                  id={`bordered-radio-${item.id}`}
-                  type="radio"
-                  value={item.id}
-                  checked={item.id == activeSubject}
-                  name="bordered-radio"
-                  className="w-4 border-none h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
-                  onChange={(e) => {
-                    dispatch(setActiveSubject(e.target.value));
-                    dispatch(clearStudents());
-                    dispatch(clearSeeAttandance());
-                  }}
-                />
-                <label
-                  htmlFor={`bordered-radio-${item.id}`}
-                  className="py-4 ml-2 w-full font-medium text-gray-900 dark:text-gray-300"
-                >
-                  {item.name.split("(")[0]}
-                </label>
-              </div>
-            ))
-          : "Loading..."}
+        {fetchGroupsLoading ? (
+          "Loading..."
+        ) : (
+          <>
+            {groups.length
+              ? groups.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center pl-4 rounded-lg border w-[49%] border-gray-200 dark:border-gray-700"
+                  >
+                    <input
+                      id={`bordered-radio-${item.id}`}
+                      type="radio"
+                      value={item.id}
+                      checked={item.id == activeSubject}
+                      name="bordered-radio"
+                      className="w-4 border-none h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
+                      onChange={(e) => {
+                        dispatch(setActiveSubject(e.target.value));
+                        dispatch(clearStudents());
+                        dispatch(clearSeeAttandance());
+                      }}
+                    />
+                    <label
+                      htmlFor={`bordered-radio-${item.id}`}
+                      className="py-4 ml-2 w-full font-medium text-gray-900 dark:text-gray-300"
+                    >
+                      {item.name.split("(")[0]}
+                    </label>
+                  </div>
+                ))
+              : "Nothing found"}
+          </>
+        )}
       </div>
 
       {groups.length && activeSubject ? (

@@ -1,14 +1,7 @@
-import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
-import NewsListItem from "../Components/NewslistItem/NewsListItem";
-import { useSelector, useDispacth } from "react-redux";
-import { useEffect } from "react";
+import DailyAbsentStudents from "../Components/DailyAbsentStudents/DailyAbsentStudents";
 
 export default function Home() {
-  useEffect(() => {}, []);
-
-  const data = useSelector((state) => state.list.data);
-
   return (
     <>
       <Navbar />
@@ -66,35 +59,7 @@ export default function Home() {
               </div>
             </div>
 
-            <table className=" table-fixed md:table-auto w-full rounded-md overflow-hidden">
-              <thead className="bg-tableHead ">
-                <tr className="text-mainText">
-                  <th className="text-left font-medium py-2 px-4">
-                    Student Name
-                  </th>
-                  <th className="text-left font-medium py-2 px-4">Group</th>
-                  <th className="text-left font-medium  hidden md:table-cell py-2 px-4">
-                    Date
-                  </th>
-                  <th className="py-2 px-4 text-left font-medium">
-                    Absent Lessons
-                  </th>
-                  <th className="hidden"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => {
-                  return (
-                    <NewsListItem
-                      item={item}
-                      key={index}
-                      index={index}
-                      data={data}
-                    />
-                  );
-                })}
-              </tbody>
-            </table>
+            <DailyAbsentStudents />
           </div>
         </div>
       </main>

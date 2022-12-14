@@ -19,6 +19,7 @@ export default function Sidebar() {
   const logOut = () => {
     delete_cookie("access_token");
     delete_cookie("refresh_token");
+    delete_cookie("user");
     dispatch(logOutTeacher());
     navigate("/login");
     window.location.reload();

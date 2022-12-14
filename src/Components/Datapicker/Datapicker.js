@@ -52,24 +52,34 @@ export default function Datapicker() {
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <StaticDatePicker
-        orientation="landscape"
-        openTo="day"
-        value={activeDate}
-        shouldDisableDate={isWeekend}
-        onChange={(newValue) => {
-          dispatch(setActiveDate(sentDate(newValue)));
-        }}
-        onAccept={() => {
-          if (location.pathname === "/check-attandance") {
-            attandanceCreate();
-          } else {
-            seeAttandanceDate();
-          }
-        }}
-        renderInput={(params) => <TextField {...params} />}
-      />
-    </LocalizationProvider>
+    <div className="relative">
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <StaticDatePicker
+          orientation="landscape"
+          openTo="day"
+          value={activeDate}
+          shouldDisableDate={isWeekend}
+          onChange={(newValue) => {
+            dispatch(setActiveDate(sentDate(newValue)));
+          }}
+          onAccept={() => {}}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </LocalizationProvider>
+      <div className="text-right pr-3 absolute bottom-4 right-0 bg-white w-full py-4">
+        <button
+          className="font-medium p-1 rounded hover:bg-gray-50 w-20 uppercase text-buttonMain"
+          onClick={() => {
+            if (location.pathname === "/check-attandance") {
+              attandanceCreate();
+            } else {
+              seeAttandanceDate();
+            }
+          }}
+        >
+          NEXT
+        </button>
+      </div>
+    </div>
   );
 }

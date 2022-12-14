@@ -15,7 +15,7 @@ import {
 } from "./Components/TeacherLogin/login_slice";
 import CheckAttandance from "./Pages/CheckAttandance";
 import TakeAttandance from "./Pages/TakeAttandace";
-import OneStudentStatus from "./Pages/OneStudentStatus";
+import OneStudentStatus from "./Pages/OneStudentStatus/OneStudentStatus";
 import UpdateAttandance from "./Pages/UpdateAttandance";
 import Admin from "./Pages/Admin";
 
@@ -38,7 +38,10 @@ const Routing = () => {
         dispatch(setIsStaticLoading(false));
       }
     } else {
-      if (location.pathname === ("/" || "/student/id")) {
+      if (
+        location.pathname === "/" ||
+        location.pathname.substring(0, 9) === "/student/"
+      ) {
         navigate(location.pathname);
       } else {
         navigate("/login");
@@ -49,14 +52,13 @@ const Routing = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/student/id" element={<OneStudentStatus />} />
       {typeof access !== "object" ? null : (
         <Route path={"/login"} element={<TeacherLogin />} />
       )}
       {typeof access !== "object" ? (
         <Route path="/dashboard" element={<Dashboard />} />
       ) : null}
-
+      <Route path="/student/:id" element={<OneStudentStatus />} />
       <Route path="/check-attandance" element={<CheckAttandance />} />
       <Route path="/take-attandance" element={<TakeAttandance />} />
       <Route path="/update-attandance" element={<UpdateAttandance />} />

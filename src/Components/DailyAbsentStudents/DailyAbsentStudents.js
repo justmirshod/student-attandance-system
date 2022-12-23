@@ -13,7 +13,9 @@ export default function DailyAbsentStudents() {
             <th className="hidden"></th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          
+        </tbody>
       </table>
     </>
   );

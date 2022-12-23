@@ -53,7 +53,7 @@ export const fecthActiveGroupStudents = createAsyncThunk(
   "students/fetch",
   async ({ groupId, token }) => {
     return await fetch(
-      `http://127.0.0.1:8000/attendance/groups/${groupId}/students/`,
+      `http://127.0.0.1:8000/attendance/groups/${groupId}/students/?page_size=30`,
       {
         headers: {
           Authorization: "Bearer " + token,
@@ -69,7 +69,7 @@ export const seeCheckedStudentsList = createAsyncThunk(
   "see/studentsAttandance",
   async ({ attandanceId, groupId, token }) => {
     return await fetch(
-      `http://127.0.0.1:8000/attendance/attendances/${attandanceId}/reports/?group=${groupId}`,
+      `http://127.0.0.1:8000/attendance/attendances/${attandanceId}/reports/?group=${groupId}&page_size=30`,
       {
         headers: {
           "Content-type": "application/json",

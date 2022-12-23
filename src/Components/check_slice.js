@@ -67,7 +67,7 @@ export const fetchStudents = createAsyncThunk(
   "students/fetchStudents",
   async ({ groupId, token }) => {
     return await fetch(
-      `http://127.0.0.1:8000/attendance/groups/${groupId}/students/`,
+      `http://127.0.0.1:8000/attendance/groups/${groupId}/students/?page_size=30`,
       {
         headers: {
           Authorization: "Bearer " + token,

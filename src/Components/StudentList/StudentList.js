@@ -1,4 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { read_cookie } from "sfcookies";
 import {
   fetchStudents,
   addExtraDataToExistStudens,
@@ -10,9 +12,7 @@ import {
   defineAttandanceDate,
   fetchPreviuoslyCheckedStudents,
 } from "./student_slice";
-import { useEffect } from "react";
-import { read_cookie } from "sfcookies";
-
+import { fetchStudentsOnPageChange } from "../Pagination/pagination_slice";
 export default function StudentList() {
   const {
     students,
@@ -34,6 +34,7 @@ export default function StudentList() {
   const attandance = useSelector((state) => state.attandance);
   const { previuoslyCheckedStudents, previuoslyCheckedStudentsLoading } =
     useSelector((state) => state.attandance);
+  const { currentPage } = useSelector((state) => state.pagination);
 
   const dispatch = useDispatch();
   const token = read_cookie("access_token");
@@ -78,8 +79,21 @@ export default function StudentList() {
     }
   }, [previuoslyCheckedStudents]);
 
+  useEffect(() => {
+    if (students.total && students.total > 0) {
+      dispatch(
+        fetchStudentsOnPageChange({
+          token,
+          attandanceId,
+          groupId: activeGroupId,
+          activePage: currentPage,
+        })
+      );
+    }
+  }, [students.page]);
+
   return (
-    <div className="h-screen pt-10 overflow-y-scroll">
+    <div className="h-screen py-10 overflow-y-scroll">
       <div className="student_list px-5 py-7 w-[90%] shadow-xl mx-auto rounded-xl">
         {fetchStudentsLoading || previuoslyCheckedStudentsLoading ? (
           "Loading..."

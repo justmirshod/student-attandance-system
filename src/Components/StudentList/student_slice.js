@@ -49,7 +49,7 @@ export const fetchPreviuoslyCheckedStudents = createAsyncThunk(
   "students/previuoslyChecked",
   async ({ groupId, token, attandanceId }) => {
     return await fetch(
-      `http://127.0.0.1:8000//attendance/attendances/${attandanceId}/reports/?group=${groupId}`,
+      `http://127.0.0.1:8000//attendance/attendances/${attandanceId}/reports/?group=${groupId}&page_size=30`,
       {
         headers: {
           "Content-type": "application/json",

@@ -26,26 +26,28 @@ export default function TakeAttandance() {
         <div className="check-attandance w-5/6 min-h-screen flex ">
           <SecondarySidebar />
           {groups.length && activeSubject && activeGroupId ? (
-            <div className="w-3/5 min-h-screen">
-              <div className="w-4/5 mx-auto mt-10 p-5 shadow-2xl rounded-lg">
-                {/* {seeDateLoading ? (
-                  "Loading..."
-                ) : ( */}
-                <>
-                  {attandanceId.length ? (
+            <>
+              {attandanceId.length ? (
+                <div className="w-3/5 max-h-screen overflow-y-scroll">
+                  <div className="w-4/5 mx-auto my-10 p-5 shadow-2xl rounded-lg">
                     <SeeAttandance />
-                  ) : attandanceId.detail ? (
-                    <>
-                      <Datapicker />
-                      <Toast />
-                    </>
-                  ) : (
+                  </div>
+                </div>
+              ) : attandanceId.detail ? (
+                <div className="w-3/5 min-h-screen">
+                  <div className="w-4/5 mx-auto mt-10 p-5 shadow-2xl rounded-lg">
                     <Datapicker />
-                  )}
-                </>
-                {/* )} */}
-              </div>
-            </div>
+                    <Toast />
+                  </div>
+                </div>
+              ) : (
+                <div className="w-3/5 min-h-screen">
+                  <div className="w-4/5 mx-auto mt-10 p-5 shadow-2xl rounded-lg">
+                    <Datapicker />
+                  </div>
+                </div>
+              )}
+            </>
           ) : null}
         </div>
       </div>

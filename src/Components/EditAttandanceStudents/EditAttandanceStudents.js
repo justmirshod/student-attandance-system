@@ -11,7 +11,9 @@ import { setExtraDataLoading, addExtraData, editStudent } from "../edit_slice";
 export default function EditAttandanceStudents() {
   const dispatch = useDispatch();
   const token = read_cookie("access_token");
-  const { activeGroupId, activeSubject } = useSelector((state) => state.groups);
+  const { activeGroupId, activeSubject, activeDate } = useSelector(
+    (state) => state.groups
+  );
   const {
     activeGroupStudentsLoading,
     activeGroupStudents,
@@ -81,10 +83,27 @@ export default function EditAttandanceStudents() {
                     <>
                       <div className="students_list">
                         <h1 className="flex items-center mb-2">
-                          Group:{" "}
-                          <span className="ml-1 font-semibold text-lg">
-                            {activeGroupStudents.results[0].group.name}
-                          </span>
+                          <div>
+                            Group:{" "}
+                            <span className="ml-1 font-semibold text-lg">
+                              {activeGroupStudents.results[0].group.name}
+                            </span>
+                          </div>
+                          <div className="ml-2">
+                            Date:
+                            <span className="ml-1 font-semibold text-lg">
+                              {activeDate
+                                .split("-")
+                                .map((item) => +item)
+                                .reverse()
+                                .map((item) =>
+                                  item.toString().length > 1
+                                    ? item
+                                    : "0" + item.toString()
+                                )
+                                .join("-")}
+                            </span>
+                          </div>
                         </h1>
                         <table className="table-auto w-full">
                           <thead>

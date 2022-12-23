@@ -27,20 +27,30 @@ export default function UpdateAttandance() {
         <div className="w-5/6 min-h-screen flex ">
           <SecondarySidebar />
           {groups.length && activeGroupId && activeSubject ? (
-            <div className="w-3/5 min-h-screen">
-              <div className="w-4/5 mx-auto mt-10 p-5 shadow-2xl rounded-lg">
-                {attandanceId.detail ? (
-                  <>
+            <>
+              {attandanceId.detail ? (
+                <>
+                  <div className="w-3/5 min-h-screen">
+                    <div className="w-4/5 mx-auto mt-10 p-5 shadow-2xl rounded-lg">
+                      <Datapicker />
+                      <Toast />
+                    </div>
+                  </div>
+                </>
+              ) : attandanceId.length ? (
+                <div className="w-3/5 max-h-screen overflow-y-scroll">
+                  <div className="w-4/5 mx-auto my-10 p-5 shadow-2xl rounded-lg">
+                    <EditAttandanceStudents />
+                  </div>
+                </div>
+              ) : (
+                <div className="w-3/5 min-h-screen">
+                  <div className="w-4/5 mx-auto mt-10 p-5 shadow-2xl rounded-lg">
                     <Datapicker />
-                    <Toast />
-                  </>
-                ) : attandanceId.length ? (
-                  <EditAttandanceStudents />
-                ) : (
-                  <Datapicker />
-                )}
-              </div>
-            </div>
+                  </div>
+                </div>
+              )}
+            </>
           ) : null}
         </div>
       </div>
